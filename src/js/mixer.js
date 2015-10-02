@@ -11,7 +11,6 @@ export default class {
 
   setupControls() {
     window.addEventListener('keyup', (e) => {
-      console.log(e.which, this.isMuted);
       if (e.which == 77)
         this.isMuted = !this.isMuted;
     });

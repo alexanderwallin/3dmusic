@@ -18,6 +18,9 @@ export default class {
     this.rotation = options.rotation;
     this.rotationSpeed = options.rotationSpeed;
 
+    // Visual options
+    this.color = new THREE.Color(Math.random(), Math.random(), Math.random());
+
     // Sounds
     this.ctx       = options.audioContext;
     this.output    = options.output;
@@ -31,14 +34,14 @@ export default class {
     this.instances = new Array();
 
     // Cube 1
-    let geometry1 = new THREE.BoxGeometry( 200, 200, 200 );
-    let material1 = new THREE.MeshBasicMaterial( { color: 0xff0000, wireframe: true } );
+    let geometry1 = new THREE.SphereGeometry( 20, 20 );
+    let material1 = new THREE.MeshBasicMaterial( { color: this.color, wireframe: false } );
     let instance1 = new THREE.Mesh(geometry1, material1);
     this.instances.push(instance1);
 
     // Cube 2
-    let geometry2 = new THREE.BoxGeometry( 200, 200, 200 );
-    let material2 = new THREE.MeshBasicMaterial( { color: 0xff0000, wireframe: true } );
+    let geometry2 = new THREE.SphereGeometry( 20, 20 );
+    let material2 = new THREE.MeshBasicMaterial( { color: this.color, wireframe: false } );
     let instance2 = new THREE.Mesh(geometry2, material2);
     this.instances.push(instance2);
 
@@ -52,10 +55,10 @@ export default class {
       let sound = new Sound({
         ctx: this.ctx,
         output: this.output,
-        audioPath: this.audioPath,
-        autoplay: true
+        audioPath: this.audioPath
       });
       sound.volume.gain.value = 1 / this.instances.length;
+      sound.play();
       this.sounds[i] = sound;
     }
     

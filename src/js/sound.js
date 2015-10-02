@@ -14,9 +14,14 @@ export default class {
     this.volume = this.ctx.createGain();
 
     this.panner = this.ctx.createPanner();
-    this.panner.distanceModel = 'linear';
+    // this.panner.distanceModel = 'linear';
+    this.panner.refDistance = 500;
 
-    this.load();
+    this.panner.connect(this.volume);
+    this.volume.connect(this.output);
+
+    if (this.autoplay)
+      this.load();
   }
 
   load() {
@@ -41,18 +46,19 @@ export default class {
 
   onLoad() {
     this.source        = this.ctx.createBufferSource();
-    this.source.loop   = true;
+    this.source.loop   = this.loop;
     this.source.buffer = this.buffer;
-
     this.source.connect(this.panner);
-    this.panner.connect(this.volume);
-    this.volume.connect(this.output);
-
-    if (this.autoplay)
-      this.play();
+    this.source.start();
   }
 
   play() {
-    this.source.start();
+    this.loop = true;
+    this.load();
+  }
+
+  hit() {
+    this.loop = false;
+    this.load();
   }
 }

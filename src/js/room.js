@@ -30,11 +30,12 @@ export default class {
 
     // Axis helper
     this.axisHelper = new THREE.AxisHelper( 600 );
-    this.scene.add( this.axisHelper );
+    // this.scene.add( this.axisHelper );
 
     // Renderer
     this.renderer = new THREE.WebGLRenderer();
     this.renderer.setSize( window.innerWidth, window.innerHeight );
+    this.renderer.setClearColor(0x1C1E21);
     this.opts.container.appendChild( this.renderer.domElement );
   }
 
