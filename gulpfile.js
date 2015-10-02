@@ -4,6 +4,7 @@ var gulp       = require('gulp'),
     jade       = require('gulp-jade'),
     browserify = require('gulp-browserify'),
     babelify   = require('babelify'),
+    sass       = require('gulp-sass'),
     webserver  = require('gulp-webserver'),
     livereload = require('gulp-livereload');
 
@@ -14,7 +15,7 @@ gulp.task('clean', function() {
     .pipe(rimraf());
 });
 
-gulp.task('build', ['build:js', 'build:views']);
+gulp.task('build', ['build:js', 'build:css', 'build:views']);
 
 gulp.task('build:js', function() {
   return gulp.src('./src/js/app.js')
@@ -22,6 +23,13 @@ gulp.task('build:js', function() {
       transform: [babelify]
     }))
     .pipe(gulp.dest('./dist/assets/js'))
+    .pipe(livereload());
+});
+
+gulp.task('build:css', function() {
+  return gulp.src('./src/scss/app.scss')
+    .pipe(sass())
+    .pipe(gulp.dest('./dist/assets/css'))
     .pipe(livereload());
 });
 
