@@ -1,8 +1,21 @@
 
+// Vendor libs
 import THREE from 'three';
 
+// App libs
+import DAW from './daw';
+
+/**
+ * Room
+ */
 export default class {
   constructor(opts) {
+    this.opts = opts;
+    this.init();
+    this.runDaw();
+  }
+
+  init() {
     this.camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 1, 10000 );
     this.camera.position.x = 200;
     this.camera.position.y = 100;
@@ -22,10 +35,14 @@ export default class {
     this.renderer = new THREE.WebGLRenderer();
     this.renderer.setSize( window.innerWidth, window.innerHeight );
 
-    opts.container.appendChild( this.renderer.domElement );
+    this.opts.container.appendChild( this.renderer.domElement );
 
     this.resizing();
     this.animate();
+  }
+
+  runDaw() {
+    this.daw = new DAW();
   }
 
   resize() {
