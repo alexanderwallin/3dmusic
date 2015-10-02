@@ -14,6 +14,7 @@ export default class {
 
     // Options
     this.origin = new THREE.Vector3(500, 0, 0);
+    this.rotation = new THREE.Vector3(0, 0, 0);
 
     // Create instances
     this.instances = new Array();
@@ -42,11 +43,20 @@ export default class {
     this.movement.setNumObjects(this.instances.length);
   }
 
+  /**
+   * Updates sound instances positions
+   */
   update(time) {
+
+    // Update x-axis rotation
+    this.rotation.setX(time * 0.0004);
+
+    // Adjust positions according to the movement
     for (let i in this.instances) {
       let instance = this.instances[i];
-      let positionDiff = this.movement.getObjectPositionDiff(instance, i, time);
-      instance.position.fromArray(instance.userData.positionStart.clone().add(positionDiff).toArray());
+      let positionDiff = this.movement.getObjectPositionDiff(i, this.rotation, time);
+      let newPosition = instance.userData.positionStart.clone().add(positionDiff).toArray();
+      instance.position.fromArray(newPosition);
     }
   }
 }
