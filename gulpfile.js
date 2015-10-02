@@ -4,9 +4,10 @@ var gulp       = require('gulp'),
     jade       = require('gulp-jade'),
     browserify = require('gulp-browserify'),
     babelify   = require('babelify'),
+    webserver  = require('gulp-webserver'),
     livereload = require('gulp-livereload');
 
-gulp.task('start', ['build', 'watch']);
+gulp.task('start', ['build', 'watch', 'serve']);
 
 gulp.task('clean', function() {
   return gulp.src('./dist', { read: false })
@@ -43,4 +44,13 @@ gulp.task('watch:js', function() {
 
 gulp.task('watch:views', function() {
   gulp.watch('./src/**/*.jade', ['build:views']);
+});
+
+gulp.task('serve', function() {
+  return gulp.src('dist')
+    .pipe(webserver({
+      livereload: true,
+      directoryListing: false,
+      open: true
+    }));
 });
