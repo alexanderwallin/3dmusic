@@ -5,6 +5,7 @@ var gulp       = require('gulp'),
     browserify = require('gulp-browserify'),
     babelify   = require('babelify'),
     sass       = require('gulp-sass'),
+    ffmpeg     = require('gulp-fluent-ffmpeg'),
     webserver  = require('gulp-webserver'),
     livereload = require('gulp-livereload');
 
@@ -15,7 +16,7 @@ gulp.task('clean', function() {
     .pipe(rimraf());
 });
 
-gulp.task('build', ['build:js', 'build:css', 'build:views']);
+gulp.task('build', ['build:js', 'build:css', 'build:views', 'build:audio']);
 
 gulp.task('build:js', function() {
   return gulp.src('./src/js/app.js')
@@ -38,9 +39,26 @@ gulp.task('build:views', function() {
     .pipe(jade())
     .pipe(gulp.dest('./dist/'))
     .pipe(livereload());
+});
+
+gulp.task('build:audio', ['audio:convert'], function() {
+  return gulp.src('./src/audio/*.mp3')
+    .pipe(gulp.dest('./dist/assets/audio'))
+    .pipe(livereload());
 })
 
-gulp.task('watch', ['livereload', 'watch:js', 'watch:views']);
+gulp.task('audio:convert', function() {
+  return gulp.src('./src/audio/*.wav')
+    .pipe(ffmpeg('mp3', function(cmd) {
+      return cmd
+        .audioBitrate('128k')
+        .audioChannels(2)
+        .audioCodec('libmp3lame')
+    }))
+    .pipe(gulp.dest('./src/audio'));
+})
+
+gulp.task('watch', ['livereload', 'watch:js', 'watch:views', 'watch:audio']);
 
 gulp.task('livereload', function() {
   livereload.listen();
@@ -53,6 +71,14 @@ gulp.task('watch:js', function() {
 gulp.task('watch:views', function() {
   gulp.watch('./src/**/*.jade', ['build:views']);
 });
+
+gulp.task('watch:audio', function() {
+  gulp.watch('./src/audio/*.wav', ['audio:convert']);
+});
+
+gulp.task('watch:audio:convert', function() {
+  gulp.watch('./src/audio/*.mp3', ['build:audio'])
+})
 
 gulp.task('serve', function() {
   return gulp.src('dist')

@@ -4,6 +4,7 @@ import THREE from 'three';
 
 // App libs
 import OrbitMovement from './movement-orbit';
+import Sound from './sound';
 
 /**
  * Instrument
@@ -16,6 +17,11 @@ export default class {
     this.origin = options.origin;
     this.rotation = options.rotation;
     this.rotationSpeed = options.rotationSpeed;
+
+    // Sounds
+    this.ctx       = options.audioContext;
+    this.audioPath = options.audioPath;
+    this.sounds    = new Array();
 
     // Create instances
     this.instances = new Array();
@@ -33,10 +39,20 @@ export default class {
     this.instances.push(instance2);
 
     // Add instances to visuals
-    for (let instance of this.instances) {
+    for (let i in this.instances) {
+      let instance = this.instances[i];
       instance.position.fromArray(this.origin.toArray());
       instance.userData.positionStart = instance.position.clone();
       this.visuals.add(instance);
+
+      let sound = new Sound({
+        ctx: this.ctx,
+        output: this.ctx.destination,
+        audioPath: this.audioPath,
+        autoplay: true
+      });
+      sound.gain.value = 1 / this.instances.length;
+      this.sounds[i] = sound;
     }
     
     // Add a movement pattern
@@ -55,8 +71,11 @@ export default class {
     for (let i in this.instances) {
       let instance = this.instances[i];
       let positionDiff = this.movement.getObjectPositionDiff(i, time);
-      let newPosition = instance.userData.positionStart.clone().add(positionDiff).toArray();
-      instance.position.fromArray(newPosition);
+      let newPosition = instance.userData.positionStart.clone().add(positionDiff);
+      instance.position.fromArray(newPosition.toArray());
+
+      // console.log('newPosition', newPosition);
+      this.sounds[i].panner.setPosition(newPosition.x, newPosition.y, newPosition.z);
     }
   }
 }

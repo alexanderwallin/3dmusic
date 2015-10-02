@@ -12,12 +12,14 @@
     "babelify": "^6.3.0",
     "gulp": "^3.9.0",
     "gulp-browserify": "^0.5.1",
+    "gulp-fluent-ffmpeg": "^1.0.2",
     "gulp-jade": "^1.1.0",
     "gulp-livereload": "^3.8.1",
     "gulp-rimraf": "^0.2.0",
     "gulp-sass": "^2.0.4",
     "gulp-webserver": "^0.9.1",
     "jade": "^1.11.0",
+    "request": "^2.64.0",
     "three": "^0.72.0"
   }
 }

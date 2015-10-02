@@ -64,7 +64,7 @@ export default class {
 
     if (time)
       this.daw.update(time);
-    
+
     this.renderer.render( this.scene, this.camera );
   }
 };

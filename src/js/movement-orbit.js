@@ -11,7 +11,7 @@ import { axisX } from './space';
 export default class {
   constructor() {
     this.numObjects = 0;
-    this.radius = 400;
+    this.radius = 1000;
     this.speed = 0.007;
 
     this.rotation;
