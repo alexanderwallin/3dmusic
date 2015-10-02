@@ -14,7 +14,8 @@ export default class {
 
     // Options
     this.origin = options.origin;
-    this.rotation = new THREE.Vector3(0, 0, 0);
+    this.rotation = options.rotation;
+    this.rotationSpeed = options.rotationSpeed;
 
     // Create instances
     this.instances = new Array();
@@ -39,8 +40,10 @@ export default class {
     }
     
     // Add a movement pattern
-    this.movement = new OrbitMovement();
-    this.movement.setNumObjects(this.instances.length);
+    this.movement               = new OrbitMovement();
+    this.movement.numObjects    = this.instances.length;
+    this.movement.rotation      = this.rotation.clone();
+    this.movement.rotationSpeed = this.rotationSpeed.clone();
   }
 
   /**
@@ -48,13 +51,10 @@ export default class {
    */
   update(time) {
 
-    // Update x-axis rotation
-    this.rotation.setX(time * 0.0004);
-
     // Adjust positions according to the movement
     for (let i in this.instances) {
       let instance = this.instances[i];
-      let positionDiff = this.movement.getObjectPositionDiff(i, this.rotation, time);
+      let positionDiff = this.movement.getObjectPositionDiff(i, time);
       let newPosition = instance.userData.positionStart.clone().add(positionDiff).toArray();
       instance.position.fromArray(newPosition);
     }

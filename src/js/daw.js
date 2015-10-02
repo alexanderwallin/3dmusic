@@ -18,12 +18,16 @@ export default class {
     this.instruments = [];
 
     let instrument1 = new Instrument({
-      origin: new THREE.Vector3(500, 0, 0)
+      origin: new THREE.Vector3(500, 0, 0),
+      rotation: new THREE.Vector3(1, 1, 1),
+      rotationSpeed: new THREE.Vector3(0.004, -0.0005, 0.004)
     })
     this.instruments.push(instrument1);
 
     let instrument2 = new Instrument({
-      origin: new THREE.Vector3(-500, 0, 0)
+      origin: new THREE.Vector3(-500, 0, 0),
+      rotation: new THREE.Vector3(-1, 1, 1),
+      rotationSpeed: new THREE.Vector3(0.004, 0.0005, 0.004)
     })
     this.instruments.push(instrument2);
   }
