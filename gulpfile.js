@@ -42,7 +42,7 @@ gulp.task('build:views', function() {
 });
 
 gulp.task('build:audio', ['audio:convert'], function() {
-  return gulp.src('./src/audio/*.mp3')
+  return gulp.src(['./src/audio/*.mp3', './src/audio/*.ogg'])
     .pipe(gulp.dest('./dist/assets/audio'))
     .pipe(livereload());
 })
@@ -73,7 +73,7 @@ gulp.task('watch:views', function() {
 });
 
 gulp.task('watch:audio', function() {
-  gulp.watch('./src/audio/*.wav', ['audio:convert']);
+  gulp.watch('./src/audio/*.wav', ['build:audio']);
 });
 
 gulp.task('watch:audio:convert', function() {

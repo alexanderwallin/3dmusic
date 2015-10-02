@@ -7,6 +7,7 @@ import Mixer from './mixer';
 import Instrument from './instrument';
 import Sound from './sound';
 import Spark from './spark';
+import Reverb from './fx/reverb';
 
 /**
  * DAW
@@ -23,9 +24,17 @@ export default class {
 
     this.mixer = new Mixer();
 
+    this.masterReverb = new Reverb({
+      ctx: this.ctx,
+      gain: 1
+    });
+
     this.mainVolume = this.ctx.createGain();
     this.mainVolume.gain.value = 1;
+
     this.mainVolume.connect(this.ctx.destination);
+    this.mainVolume.connect(this.masterReverb.output);
+    this.masterReverb.output.connect(this.ctx.destination);
   }
 
   createInstruments() {
@@ -75,7 +84,8 @@ export default class {
       sound: new Sound({
         ctx: this.ctx,
         audioPath: 'assets/audio/hihat.mp3',
-        output: this.mainVolume
+        output: this.mainVolume,
+        gain: 0.3
       })
     });
     this.sparks.push(spark1);

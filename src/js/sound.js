@@ -12,6 +12,7 @@ export default class {
     this.autoplay  = options.autoplay;
 
     this.volume = this.ctx.createGain();
+    this.volume.gain.value = options.gain || 1;
 
     this.panner = this.ctx.createPanner();
     // this.panner.distanceModel = 'linear';

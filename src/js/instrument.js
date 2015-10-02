@@ -28,7 +28,7 @@ export default class {
     this.sounds    = new Array();
 
     this.volume    = this.ctx.createGain();
-    this.volume.gain.value = 0.5;
+    this.volume.gain.value = options.gain || 0.3;
 
     // Create instances
     this.instances = new Array();
