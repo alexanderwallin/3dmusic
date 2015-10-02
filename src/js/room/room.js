@@ -4,6 +4,8 @@ import THREE from 'three';
 export default class {
   constructor(opts) {
     this.camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 1, 10000 );
+    this.camera.position.x = 200;
+    this.camera.position.y = 100;
     this.camera.position.z = 1000;
 
     this.scene = new THREE.Scene();
@@ -14,16 +16,36 @@ export default class {
     this.mesh = new THREE.Mesh( geometry, material );
     this.scene.add( this.mesh );
 
+    this.axisHelper = new THREE.AxisHelper( 600 );
+    this.scene.add( this.axisHelper );
+
     this.renderer = new THREE.WebGLRenderer();
     this.renderer.setSize( window.innerWidth, window.innerHeight );
 
     opts.container.appendChild( this.renderer.domElement );
+
+    this.resizing();
+    this.animate();
+  }
+
+  resize() {
+    let w = window.innerWidth;
+    let h = window.innerHeight;
+    this.renderer.setSize(w, h);
+    this.camera.aspect = w/h;
+    this.camera.updateProjectionMatrix();
+  }
+
+  resizing() {
+    window.addEventListener('resize', () => {
+      this.resize();
+    });
+
+    this.resize();
   }
 
   animate() {
- 
-    // note: three.js includes requestAnimationFrame shim 
-    requestAnimationFrame( this.animate );
+    requestAnimationFrame( this.animate.bind(this) );
 
     this.mesh.rotation.x += 0.01;
     this.mesh.rotation.y += 0.02;
