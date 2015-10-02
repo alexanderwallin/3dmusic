@@ -21,7 +21,7 @@ export default class {
 
     // Camera
     this.camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 1, 10000 );
-    this.camera.position.x = 200;
+    // this.camera.position.x = 200;
     this.camera.position.y = 100;
     this.camera.position.z = 1000;
 
