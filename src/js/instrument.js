@@ -12,6 +12,9 @@ export default class {
   constructor() {
     this.visuals = new THREE.Object3D();
 
+    // Options
+    this.origin = new THREE.Vector3(500, 0, 0);
+
     // Create instances
     this.instances = new Array();
 
@@ -29,6 +32,7 @@ export default class {
 
     // Add instances to visuals
     for (let instance of this.instances) {
+      instance.position.fromArray(this.origin.toArray());
       instance.userData.positionStart = instance.position.clone();
       this.visuals.add(instance);
     }
