@@ -11,7 +11,7 @@ export default class {
     this.output    = options.output;
     this.autoplay  = options.autoplay;
 
-    this.gain = this.ctx.createGain();
+    this.volume = this.ctx.createGain();
 
     this.panner = this.ctx.createPanner();
     this.panner.distanceModel = 'linear';
@@ -45,7 +45,8 @@ export default class {
     this.source.buffer = this.buffer;
 
     this.source.connect(this.panner);
-    this.panner.connect(this.output);
+    this.panner.connect(this.volume);
+    this.volume.connect(this.output);
 
     if (this.autoplay)
       this.play();

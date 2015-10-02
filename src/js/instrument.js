@@ -23,6 +23,9 @@ export default class {
     this.audioPath = options.audioPath;
     this.sounds    = new Array();
 
+    this.volume    = this.ctx.createGain();
+    this.volume.gain.value = 0.5;
+
     // Create instances
     this.instances = new Array();
 
@@ -51,7 +54,7 @@ export default class {
         audioPath: this.audioPath,
         autoplay: true
       });
-      sound.gain.value = 1 / this.instances.length;
+      sound.volume.gain.value = 1 / this.instances.length;
       this.sounds[i] = sound;
     }
     
