@@ -9,11 +9,11 @@ import OrbitMovement from './movement-orbit';
  * Instrument
  */
 export default class {
-  constructor() {
+  constructor(options) {
     this.visuals = new THREE.Object3D();
 
     // Options
-    this.origin = new THREE.Vector3(500, 0, 0);
+    this.origin = options.origin;
     this.rotation = new THREE.Vector3(0, 0, 0);
 
     // Create instances

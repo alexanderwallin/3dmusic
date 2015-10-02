@@ -16,7 +16,16 @@ export default class {
 
   createInstruments() {
     this.instruments = [];
-    this.instruments.push(new Instrument());
+
+    let instrument1 = new Instrument({
+      origin: new THREE.Vector3(500, 0, 0)
+    })
+    this.instruments.push(instrument1);
+
+    let instrument2 = new Instrument({
+      origin: new THREE.Vector3(-500, 0, 0)
+    })
+    this.instruments.push(instrument2);
   }
 
   populate() {
