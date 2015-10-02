@@ -3,6 +3,7 @@ var gulp       = require('gulp'),
     rimraf     = require('gulp-rimraf'),
     jade       = require('gulp-jade'),
     browserify = require('gulp-browserify'),
+    babelify   = require('babelify'),
     livereload = require('gulp-livereload');
 
 gulp.task('start', ['build', 'watch']);
@@ -16,7 +17,9 @@ gulp.task('build', ['build:js', 'build:views']);
 
 gulp.task('build:js', function() {
   return gulp.src('./src/js/app.js')
-    .pipe(browserify())
+    .pipe(browserify({
+      transform: [babelify]
+    }))
     .pipe(gulp.dest('./dist/assets/js'))
     .pipe(livereload());
 });
