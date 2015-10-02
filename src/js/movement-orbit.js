@@ -9,18 +9,18 @@ export default class {
   constructor() {
     this.numObjects = 0;
     this.radius = 400;
+    this.speed = 0.007;
   }
 
   setNumObjects(count) {
     this.numObjects = count;
   }
 
-  getObjectPositionDiff(object, index) {
+  getObjectPositionDiff(object, index, currentTime) {
     let phase = 2 * Math.PI * (index / this.numObjects);
     let diff = new THREE.Vector3();
-    let now = Date.now();
-    diff.x = this.radius * Math.sin(phase + now / 1000);
-    diff.z = this.radius * Math.cos(phase + now / 1000);
+    diff.x = this.radius * Math.sin(phase + currentTime * this.speed);
+    diff.z = this.radius * Math.cos(phase + currentTime * this.speed);
     return diff;
   }
 }

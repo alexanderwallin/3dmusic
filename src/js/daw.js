@@ -27,9 +27,9 @@ export default class {
     }
   }
 
-  update() {
+  update(time) {
     for (let instrument of this.instruments) {
-      instrument.update();
+      instrument.update(time);
     }
   }
 };

@@ -38,10 +38,10 @@ export default class {
     this.movement.setNumObjects(this.instances.length);
   }
 
-  update() {
+  update(time) {
     for (let i in this.instances) {
       let instance = this.instances[i];
-      let positionDiff = this.movement.getObjectPositionDiff(instance, i);
+      let positionDiff = this.movement.getObjectPositionDiff(instance, i, time);
       instance.position.fromArray(instance.userData.positionStart.clone().add(positionDiff).toArray());
     }
   }

@@ -59,9 +59,12 @@ export default class {
     this.resize();
   }
 
-  animate() {
+  animate(time) {
     requestAnimationFrame( this.animate.bind(this) );
-    this.daw.update();
+
+    if (time)
+      this.daw.update(time);
+    
     this.renderer.render( this.scene, this.camera );
   }
 };
