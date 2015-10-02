@@ -3,6 +3,7 @@
 import THREE from 'three';
 
 // App libs
+import Mixer from './mixer';
 import Instrument from './instrument';
 
 /**
@@ -18,8 +19,11 @@ export default class {
   createAudioContext() {
     this.ctx = new AudioContext();
 
+    this.mixer = new Mixer();
+
     this.mainVolume = this.ctx.createGain();
     this.mainVolume.gain.value = 1;
+    this.mainVolume.connect(this.ctx.destination);
   }
 
   createInstruments() {
@@ -30,6 +34,7 @@ export default class {
       rotation: new THREE.Vector3(1, 1, 1),
       rotationSpeed: new THREE.Vector3(0.002, 0, 0.002),
       audioContext: this.ctx,
+      output: this.mainVolume,
       audioPath: 'assets/audio/organ.mp3'
     })
     this.instruments.push(instrument1);
@@ -39,6 +44,7 @@ export default class {
       rotation: new THREE.Vector3(-1, 1, 1),
       rotationSpeed: new THREE.Vector3(0.004, 0, 0.004),
       audioContext: this.ctx,
+      output: this.mainVolume,
       audioPath: 'assets/audio/pipes.mp3'
     })
     this.instruments.push(instrument2);
@@ -57,6 +63,8 @@ export default class {
   }
 
   update(time) {
+    this.mainVolume.gain.value = this.mixer.isMuted ? 0 : 1;
+
     for (let instrument of this.instruments) {
       instrument.update(time);
     }

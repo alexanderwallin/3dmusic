@@ -20,6 +20,7 @@ export default class {
 
     // Sounds
     this.ctx       = options.audioContext;
+    this.output    = options.output;
     this.audioPath = options.audioPath;
     this.sounds    = new Array();
 
@@ -50,7 +51,7 @@ export default class {
 
       let sound = new Sound({
         ctx: this.ctx,
-        output: this.ctx.destination,
+        output: this.output,
         audioPath: this.audioPath,
         autoplay: true
       });
