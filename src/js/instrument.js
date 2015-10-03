@@ -27,8 +27,9 @@ export default class {
     this.audioPath = options.audioPath;
     this.sounds    = new Array();
 
-    this.volume    = this.ctx.createGain();
+    this.volume = this.ctx.createGain();
     this.volume.gain.value = options.gain || 0.3;
+    this.volume.connect(this.output);
 
     // Create instances
     this.instances = new Array();
@@ -54,7 +55,7 @@ export default class {
 
       let sound = new Sound({
         ctx: this.ctx,
-        output: this.output,
+        output: this.volume,
         audioPath: this.audioPath
       });
       sound.volume.gain.value = 1 / this.instances.length;
