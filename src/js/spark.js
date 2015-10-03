@@ -12,6 +12,9 @@ export default class {
 
     this.sound = options.sound;
     this.connect(options.instrument1, options.instrument2, options.distance);
+
+    this.onHit = options.onHit;
+    this.vfxs  = options.vfxs || [];
   }
 
   connect(instrument1, instrument2, distance) {
@@ -51,6 +54,12 @@ export default class {
           let soundPosition = spark.a.position.clone().lerp(spark.b.position, 0.5);
           this.sound.panner.setPosition(soundPosition.x, soundPosition.y, soundPosition.z);
           this.sound.hit();
+
+          if (this.onHit)
+            this.onHit();
+
+          for (let vfx of this.vfxs)
+            vfx.trigger();
 
           spark.isActive = true;
         }

@@ -1,6 +1,7 @@
 
 // Vendor libs
 import THREE from 'three';
+import TWEEN from 'tween.js';
 
 // App libs
 import DAW from './daw';
@@ -62,6 +63,8 @@ export default class {
 
   animate(time) {
     requestAnimationFrame( this.animate.bind(this) );
+
+    TWEEN.update(time);
 
     if (time)
       this.daw.update(time);

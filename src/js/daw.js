@@ -8,6 +8,7 @@ import Instrument from './instrument';
 import Sound from './sound';
 import Spark from './spark';
 import Reverb from './fx/reverb';
+import VFXHitRing from './vfx/hitring';
 
 /**
  * DAW
@@ -135,7 +136,8 @@ export default class {
         audioPath: 'assets/audio/kick.mp3',
         output: this.masterCompressor,
         gain: 1
-      })
+      }),
+      vfxs: [new VFXHitRing()]
     });
     this.sparks.push(spark3);
   }
@@ -149,6 +151,9 @@ export default class {
 
     for (let spark of this.sparks) {
       this.container.add(spark.linesContainer);
+
+      for (let vfx of spark.vfxs)
+        this.container.add(vfx.mesh);
     }
   }
 
