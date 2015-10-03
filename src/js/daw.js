@@ -43,32 +43,43 @@ export default class {
     let instrument1 = new Instrument({
       origin: new THREE.Vector3(2000, 0, 0),
       rotation: new THREE.Vector3(1, 1, 1),
-      rotationSpeed: new THREE.Vector3(0.002, 0, 0.002),
+      rotationSpeed: new THREE.Vector3(0.005, 0, 0.005),
       audioContext: this.ctx,
       output: this.mainVolume,
       audioPath: 'assets/audio/organ-lo.mp3'
-    })
+    });
     this.instruments.push(instrument1);
 
     let instrument2 = new Instrument({
       origin: new THREE.Vector3(-2000, 0, 0),
       rotation: new THREE.Vector3(-1, 1, 1),
-      rotationSpeed: new THREE.Vector3(0.0045, 0.001, 0.0045),
+      rotationSpeed: new THREE.Vector3(0.0075, 0.001, 0.0075),
       audioContext: this.ctx,
       output: this.mainVolume,
       audioPath: 'assets/audio/pipes-lo.mp3'
-    })
+    });
     this.instruments.push(instrument2);
 
     let instrument3 = new Instrument({
       origin: new THREE.Vector3(0, 0, 0),
       rotation: new THREE.Vector3(-1, 1, 1),
-      rotationSpeed: new THREE.Vector3(0.0016, 0.0016, 0.0033),
+      rotationSpeed: new THREE.Vector3(0.0026, 0.0026, 0.0053),
       audioContext: this.ctx,
       output: this.mainVolume,
       audioPath: 'assets/audio/horn.mp3'
-    })
+    });
     this.instruments.push(instrument3);
+
+    let instrument4 = new Instrument({
+      origin: new THREE.Vector3(0, 0, 0),
+      rotation: new THREE.Vector3(1, -1, 1),
+      rotationSpeed: new THREE.Vector3(-0.0031, 0.0024, -0.0053),
+      audioContext: this.ctx,
+      output: this.mainVolume,
+      gain: 0.15,
+      audioPath: 'assets/audio/pipes.mp3'
+    });
+    this.instruments.push(instrument4);
 
     for (let instrument of this.instruments) {
 
@@ -97,10 +108,24 @@ export default class {
       sound: new Sound({
         ctx: this.ctx,
         audioPath: 'assets/audio/bass-short.mp3',
-        output: this.mainVolume
+        output: this.mainVolume,
+        gain: 0.6
       })
     });
     this.sparks.push(spark2);
+
+    let spark3 = new Spark({
+      instrument1: instrument1,
+      instrument2: instrument4,
+      distance: 800,
+      sound: new Sound({
+        ctx: this.ctx,
+        audioPath: 'assets/audio/kick.mp3',
+        output: this.mainVolume,
+        gain: 1
+      })
+    });
+    this.sparks.push(spark3);
   }
 
   populate() {
