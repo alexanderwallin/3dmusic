@@ -29,12 +29,24 @@ export default class {
       gain: 1
     });
 
+    // Create a compressor node
+    let compressor = this.ctx.createDynamicsCompressor();
+    compressor.threshold.value = -50;
+    compressor.knee.value = 40;
+    compressor.ratio.value = 12;
+    compressor.reduction.value = -20;
+    compressor.attack.value = 0.002;
+    compressor.release.value = 0.25;
+    this.masterCompressor = compressor;
+
     this.mainVolume = this.ctx.createGain();
     this.mainVolume.gain.value = 1;
 
+    this.masterCompressor.connect(this.mainVolume);
     this.mainVolume.connect(this.ctx.destination);
-    this.mainVolume.connect(this.masterReverb.output);
-    this.masterReverb.output.connect(this.ctx.destination);
+
+    this.masterCompressor.connect(this.masterReverb.output);
+    this.masterReverb.output.connect(this.mainVolume);
   }
 
   createInstruments() {
@@ -45,7 +57,7 @@ export default class {
       rotation: new THREE.Vector3(1, 1, 1),
       rotationSpeed: new THREE.Vector3(0.005, 0, 0.005),
       audioContext: this.ctx,
-      output: this.mainVolume,
+      output: this.masterCompressor,
       audioPath: 'assets/audio/organ-lo.mp3'
     });
     this.instruments.push(instrument1);
@@ -53,9 +65,9 @@ export default class {
     let instrument2 = new Instrument({
       origin: new THREE.Vector3(-2000, 0, 0),
       rotation: new THREE.Vector3(-1, 1, 1),
-      rotationSpeed: new THREE.Vector3(0.0075, 0.001, 0.0075),
+      rotationSpeed: new THREE.Vector3(0.0055, 0.001, 0.0055),
       audioContext: this.ctx,
-      output: this.mainVolume,
+      output: this.masterCompressor,
       audioPath: 'assets/audio/pipes-lo.mp3'
     });
     this.instruments.push(instrument2);
@@ -63,9 +75,9 @@ export default class {
     let instrument3 = new Instrument({
       origin: new THREE.Vector3(0, 0, 0),
       rotation: new THREE.Vector3(-1, 1, 1),
-      rotationSpeed: new THREE.Vector3(0.0026, 0.0026, 0.0053),
+      rotationSpeed: new THREE.Vector3(0.0016, 0.0016, 0.0043),
       audioContext: this.ctx,
-      output: this.mainVolume,
+      output: this.masterCompressor,
       audioPath: 'assets/audio/horn.mp3'
     });
     this.instruments.push(instrument3);
@@ -73,10 +85,10 @@ export default class {
     let instrument4 = new Instrument({
       origin: new THREE.Vector3(0, 0, 0),
       rotation: new THREE.Vector3(1, -1, 1),
-      rotationSpeed: new THREE.Vector3(-0.0031, 0.0024, -0.0053),
+      rotationSpeed: new THREE.Vector3(-0.0027, 0.0021, -0.0038),
       audioContext: this.ctx,
-      output: this.mainVolume,
-      gain: 0.15,
+      output: this.masterCompressor,
+      gain: 0.05,
       audioPath: 'assets/audio/pipes.mp3'
     });
     this.instruments.push(instrument4);
@@ -95,7 +107,7 @@ export default class {
       sound: new Sound({
         ctx: this.ctx,
         audioPath: 'assets/audio/hihat.mp3',
-        output: this.mainVolume,
+        output: this.masterCompressor,
         gain: 0.3
       })
     });
@@ -108,7 +120,7 @@ export default class {
       sound: new Sound({
         ctx: this.ctx,
         audioPath: 'assets/audio/bass-short.mp3',
-        output: this.mainVolume,
+        output: this.masterCompressor,
         gain: 0.6
       })
     });
@@ -121,7 +133,7 @@ export default class {
       sound: new Sound({
         ctx: this.ctx,
         audioPath: 'assets/audio/kick.mp3',
-        output: this.mainVolume,
+        output: this.masterCompressor,
         gain: 1
       })
     });
