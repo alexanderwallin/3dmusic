@@ -9,6 +9,7 @@ import Sound from './sound';
 import Spark from './spark';
 import Reverb from './fx/reverb';
 import VFXHitRing from './vfx/hitring';
+import VFXLineRaster from './vfx/line-raster';
 
 /**
  * DAW
@@ -122,8 +123,9 @@ export default class {
         ctx: this.ctx,
         audioPath: 'assets/audio/bass-short.mp3',
         output: this.masterCompressor,
-        gain: 0.6
-      })
+        gain: 0.8
+      }),
+      vfxs: [new VFXLineRaster()]
     });
     this.sparks.push(spark2);
 
