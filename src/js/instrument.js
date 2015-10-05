@@ -5,6 +5,7 @@ import THREE from 'three';
 // App libs
 import OrbitMovement from './movement-orbit';
 import Sound from './sound';
+import ctx from './audio-context';
 
 /**
  * Instrument
@@ -22,14 +23,11 @@ export default class {
     this.color = new THREE.Color(Math.random(), Math.random(), Math.random());
 
     // Sounds
-    this.ctx       = options.audioContext;
-    this.output    = options.output;
     this.audioPath = options.audioPath;
     this.sounds    = new Array();
 
-    this.volume = this.ctx.createGain();
-    this.volume.gain.value = options.gain || 0.3;
-    this.volume.connect(this.output);
+    this.input = ctx.createGain();
+    this.output = ctx.createGain();
 
     // Create instances
     this.instances = new Array();
@@ -54,11 +52,10 @@ export default class {
       this.visuals.add(instance);
 
       let sound = new Sound({
-        ctx: this.ctx,
-        output: this.volume,
         audioPath: this.audioPath
       });
-      sound.volume.gain.value = 1 / this.instances.length;
+      sound.output.gain.value = 1 / this.instances.length;
+      sound.output.connect(this.output);
       sound.play();
       this.sounds[i] = sound;
     }

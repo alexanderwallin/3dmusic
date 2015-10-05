@@ -6,6 +6,7 @@ var gulp       = require('gulp'),
     babelify   = require('babelify'),
     sass       = require('gulp-sass'),
     ffmpeg     = require('gulp-fluent-ffmpeg'),
+    sourcemaps = require('gulp-sourcemaps')
     webserver  = require('gulp-webserver'),
     livereload = require('gulp-livereload');
 
@@ -20,16 +21,21 @@ gulp.task('build', ['build:js', 'build:css', 'build:views', 'build:audio']);
 
 gulp.task('build:js', function() {
   return gulp.src('./src/js/app.js')
+    .pipe(sourcemaps.init())
     .pipe(browserify({
+      debug: true,
       transform: [babelify]
     }))
+    .pipe(sourcemaps.write())
     .pipe(gulp.dest('./dist/assets/js'))
     .pipe(livereload());
 });
 
 gulp.task('build:css', function() {
   return gulp.src('./src/scss/app.scss')
+    .pipe(sourcemaps.init())
     .pipe(sass())
+    .pipe(sourcemaps.write())
     .pipe(gulp.dest('./dist/assets/css'))
     .pipe(livereload());
 });

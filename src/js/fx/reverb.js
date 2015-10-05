@@ -1,18 +1,20 @@
 
 import Sound from '../sound';
+import ctx from '../audio-context';
 
 /**
  * Reverb
  */
 export default class {
   constructor(options) {
-    this.ctx = options.ctx;
     this.audioPath = 'assets/audio/concert-crowd.ogg';
-    this.convolver = this.ctx.createConvolver();
+    this.convolver = ctx.createConvolver();
 
-    this.output = this.ctx.createGain();
-    this.output.gain.value = options.gain;
+    this.input = ctx.createGain();
+    this.output = ctx.createGain();
+    this.output.gain.value = options.gain || 0.3;
 
+    this.input.connect(this.convolver);
     this.convolver.connect(this.output);
 
     this.load();
@@ -28,7 +30,7 @@ export default class {
     request.onload = function(e) {
 
       // Create a buffer from the response ArrayBuffer.
-      _this.ctx.decodeAudioData(this.response, function(buffer) {
+      ctx.decodeAudioData(this.response, function(buffer) {
         _this.buffer = buffer;
         _this.onLoad();
       }, function() {

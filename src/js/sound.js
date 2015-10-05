@@ -1,31 +1,34 @@
 
+// App libs
+import ctx from './audio-context'
+
 /**
  * Sound
  */
 export default class {
   constructor(options) {
-    this.ctx       = options.ctx;
     this.audioPath = options.audioPath;
     this.buffer    = null;
     this.source    = null;
-    this.output    = options.output;
-    this.autoplay  = options.autoplay;
+    this.autoplay  = !!options.autoplay;
 
-    this.volume = this.ctx.createGain();
-    this.volume.gain.value = options.gain || 1;
+    this.output = ctx.createGain();
+    this.output.gain.value = options.gain || 1;
 
-    this.panner = this.ctx.createPanner();
+    this.panner = ctx.createPanner();
     // this.panner.distanceModel = 'linear';
     this.panner.refDistance = 500;
 
-    this.panner.connect(this.volume);
-    this.volume.connect(this.output);
+    this.panner.connect(this.output);
 
     if (this.autoplay)
       this.load();
   }
 
   load() {
+    if (this.buffer)
+      return this.onLoad();
+
     let _this = this;
     
     // Load a sound file using an ArrayBuffer XMLHttpRequest.
@@ -35,7 +38,7 @@ export default class {
     request.onload = function(e) {
 
       // Create a buffer from the response ArrayBuffer.
-      _this.ctx.decodeAudioData(this.response, function(buffer) {
+      ctx.decodeAudioData(this.response, function(buffer) {
         _this.buffer = buffer;
         _this.onLoad();
       }, function() {
@@ -46,7 +49,7 @@ export default class {
   }
 
   onLoad() {
-    this.source        = this.ctx.createBufferSource();
+    this.source        = ctx.createBufferSource();
     this.source.loop   = this.loop;
     this.source.buffer = this.buffer;
     this.source.connect(this.panner);

@@ -3,11 +3,13 @@
 import THREE from 'three';
 
 // App libs
+import ctx from './audio-context';
 import Mixer from './mixer';
 import Instrument from './instrument';
 import Sound from './sound';
 import Spark from './spark';
 import Reverb from './fx/reverb';
+import Compressor from './fx/compressor';
 import VFXHitRing from './vfx/hitring';
 import VFXLineRaster from './vfx/line-raster';
 
@@ -16,88 +18,63 @@ import VFXLineRaster from './vfx/line-raster';
  */
 export default class {
   constructor() {
-    this.createAudioContext();
+    this.setupMixer();
     this.createInstruments();
     this.populate();
   }
 
-  createAudioContext() {
-    this.ctx = new AudioContext();
-
+  /**
+   * Creates the mixer
+   */
+  setupMixer() {
     this.mixer = new Mixer();
 
-    this.masterReverb = new Reverb({
-      ctx: this.ctx,
-      gain: 1
-    });
+    // Add fx
+    // this.mixer.master.addFx(new Reverb({ gain: 0.1 }));
+    this.mixer.master.addFx(new Compressor());
 
-    // Create a compressor node
-    let compressor = this.ctx.createDynamicsCompressor();
-    compressor.threshold.value = -50;
-    compressor.knee.value = 40;
-    compressor.ratio.value = 12;
-    compressor.reduction.value = -20;
-    compressor.attack.value = 0.002;
-    compressor.release.value = 0.25;
-    this.masterCompressor = compressor;
-
-    this.mainVolume = this.ctx.createGain();
-    this.mainVolume.gain.value = 1;
-
-    this.masterCompressor.connect(this.mainVolume);
-    this.mainVolume.connect(this.ctx.destination);
-
-    this.masterCompressor.connect(this.masterReverb.output);
-    this.masterReverb.output.connect(this.mainVolume);
+    this.mixer.master.output.connect(ctx.destination);
   }
 
+  /**
+   * Adds instruments to mixer
+   */
   createInstruments() {
-    this.instruments = [];
+    let rotationSpeedScalar = 0.5;
 
     let instrument1 = new Instrument({
       origin: new THREE.Vector3(2000, 0, 0),
       rotation: new THREE.Vector3(1, 1, 1),
-      rotationSpeed: new THREE.Vector3(0.005, 0, 0.005),
-      audioContext: this.ctx,
-      output: this.masterCompressor,
+      rotationSpeed: new THREE.Vector3(0.005, 0, 0.005).multiplyScalar(rotationSpeedScalar),
       audioPath: 'assets/audio/organ-lo.mp3'
     });
-    this.instruments.push(instrument1);
+    this.mixer.setInstrumentAt(instrument1, 0);
 
     let instrument2 = new Instrument({
       origin: new THREE.Vector3(-2000, 0, 0),
       rotation: new THREE.Vector3(-1, 1, 1),
-      rotationSpeed: new THREE.Vector3(0.0055, 0.001, 0.0055),
-      audioContext: this.ctx,
-      output: this.masterCompressor,
+      rotationSpeed: new THREE.Vector3(0.0055, 0.001, 0.0055).multiplyScalar(rotationSpeedScalar),
       audioPath: 'assets/audio/pipes-lo.mp3'
     });
-    this.instruments.push(instrument2);
+    this.mixer.setInstrumentAt(instrument2, 1);
 
     let instrument3 = new Instrument({
       origin: new THREE.Vector3(0, 0, 0),
       rotation: new THREE.Vector3(-1, 1, 1),
-      rotationSpeed: new THREE.Vector3(0.0016, 0.0016, 0.0043),
-      audioContext: this.ctx,
-      output: this.masterCompressor,
+      rotationSpeed: new THREE.Vector3(0.0016, 0.0016, 0.0043).multiplyScalar(rotationSpeedScalar),
       audioPath: 'assets/audio/horn.mp3'
     });
-    this.instruments.push(instrument3);
+    this.mixer.setInstrumentAt(instrument3, 2);
 
     let instrument4 = new Instrument({
       origin: new THREE.Vector3(0, 0, 0),
       rotation: new THREE.Vector3(1, -1, 1),
-      rotationSpeed: new THREE.Vector3(-0.0027, 0.0021, -0.0038),
-      audioContext: this.ctx,
-      output: this.masterCompressor,
+      rotationSpeed: new THREE.Vector3(-0.0027, 0.0021, -0.0038).multiplyScalar(rotationSpeedScalar),
       gain: 0.05,
       audioPath: 'assets/audio/pipes.mp3'
     });
-    this.instruments.push(instrument4);
-
-    for (let instrument of this.instruments) {
-
-    }
+    this.mixer.setInstrumentAt(instrument4, 3);
+    this.mixer.setTrackVolume(3, 0.2);
 
     // Add sparks
     this.sparks = [];
@@ -107,9 +84,7 @@ export default class {
       instrument2: instrument2,
       distance: 1600,
       sound: new Sound({
-        ctx: this.ctx,
         audioPath: 'assets/audio/hihat.mp3',
-        output: this.masterCompressor,
         gain: 0.3
       })
     });
@@ -120,9 +95,7 @@ export default class {
       instrument2: instrument3,
       distance: 1000,
       sound: new Sound({
-        ctx: this.ctx,
         audioPath: 'assets/audio/bass-short.mp3',
-        output: this.masterCompressor,
         gain: 0.8
       }),
       vfxs: [new VFXLineRaster()]
@@ -134,21 +107,27 @@ export default class {
       instrument2: instrument4,
       distance: 800,
       sound: new Sound({
-        ctx: this.ctx,
         audioPath: 'assets/audio/kick.mp3',
-        output: this.masterCompressor,
         gain: 1
       }),
       vfxs: [new VFXHitRing()]
     });
     this.sparks.push(spark3);
+
+    for (let spark of this.sparks) {
+      spark.sound.output.connect(this.mixer.master.input);
+    }
   }
 
+  /**
+   * Adds visual elements to world
+   */
   populate() {
     this.container = new THREE.Object3D();
 
-    for (let instrument of this.instruments) {
-      this.container.add(instrument.visuals);
+    for (let track of this.mixer.tracks) {
+      if (track.instrument)
+        this.container.add(track.instrument.visuals);
     }
 
     for (let spark of this.sparks) {
@@ -159,11 +138,13 @@ export default class {
     }
   }
 
+  /**
+   * Next frame plz
+   */
   update(time) {
-    this.mainVolume.gain.value = this.mixer.isMuted ? 0 : 1;
-
-    for (let instrument of this.instruments) {
-      instrument.update(time);
+    for (let track of this.mixer.tracks) {
+      if (track.instrument)
+        track.instrument.update(time);
     }
 
     for (let spark of this.sparks)
