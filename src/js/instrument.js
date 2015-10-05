@@ -1,6 +1,7 @@
 
 // Vendor libs
 import THREE from 'three';
+import TWEEN from 'tween.js';
 
 // App libs
 import OrbitMovement from './movement-orbit';
@@ -13,6 +14,8 @@ import ctx from './audio-context';
 export default class {
   constructor(options) {
     this.visuals = new THREE.Object3D();
+
+    this.isActivated = true;
 
     // Options
     this.origin = options.origin;
@@ -34,13 +37,13 @@ export default class {
 
     // Cube 1
     let geometry1 = new THREE.SphereGeometry( 20, 20 );
-    let material1 = new THREE.MeshBasicMaterial( { color: this.color, wireframe: false } );
+    let material1 = new THREE.MeshBasicMaterial( { color: this.color, transparent: true, opacity: 1 } );
     let instance1 = new THREE.Mesh(geometry1, material1);
     this.instances.push(instance1);
 
     // Cube 2
     let geometry2 = new THREE.SphereGeometry( 20, 20 );
-    let material2 = new THREE.MeshBasicMaterial( { color: this.color, wireframe: false } );
+    let material2 = new THREE.MeshBasicMaterial( { color: this.color, transparent: true, opacity: 1 } );
     let instance2 = new THREE.Mesh(geometry2, material2);
     this.instances.push(instance2);
 
@@ -65,6 +68,34 @@ export default class {
     this.movement.numObjects    = this.instances.length;
     this.movement.rotation      = this.rotation.clone();
     this.movement.rotationSpeed = this.rotationSpeed.clone();
+  }
+
+  /**
+   * Sets activated state
+   */
+  setActivated(activated) {
+    if (activated != this.isActivated) {
+      this.fadeVisuals(activated ? 1 : 0);
+    }
+
+    this.isActivated = activated;
+  }
+
+  /**
+   * Fades visuals in or out
+   */
+  fadeVisuals(opacity) {
+    let _this = this;
+
+    let tween = new TWEEN.Tween({ opacity: opacity == 1 ? 0 : 1 })
+      .to({ opacity: opacity }, 300)
+      .easing(TWEEN.Easing.Linear.None)
+      .onUpdate(function() {
+        for (let mesh of _this.instances) {
+          mesh.material.opacity = this.opacity;
+        }
+      })
+      .start();
   }
 
   /**

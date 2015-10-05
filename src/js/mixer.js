@@ -9,6 +9,7 @@ let numTracks = 16;
  */
 export default class {
   constructor() {
+    this.isActivated = true;
     this.isMuted = false;
 
     // Master track
@@ -33,6 +34,16 @@ export default class {
     window.addEventListener('keyup', (e) => {
       if (e.which == 77)
         this.toggleMute();
+    });
+
+    window.addEventListener('keyup', (e) => {
+      if (e.which >= 48 && e.which <= 57) {
+        let trackIndex = e.which - 49;
+        if (e.altKey)
+          trackIndex += 10;
+
+        this.tracks[trackIndex].toggleActivated();
+      }
     });
   }
 

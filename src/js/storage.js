@@ -10,7 +10,7 @@ class Storage {
   getOrSet(key, defaultValue) {
     let val = this.get(key);
     
-    if (!val) {
+    if (val === null) {
       this.set(key, defaultValue);
       return defaultValue;
     }

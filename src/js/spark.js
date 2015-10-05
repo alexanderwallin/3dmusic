@@ -21,6 +21,8 @@ export default class {
 
     this.input  = this.sound.output;
     this.output = this.sound.output;
+
+    this.setActivated(true);
   }
 
   connect(instrument1, instrument2, distance) {
@@ -49,11 +51,15 @@ export default class {
     }
   }
 
+  setActivated(activated) {
+    this.isActivated = activated;
+  }
+
   update() {
     for (let spark of this.sparks) {
       spark.sparkLine.visible = spark.isActive;
 
-      if (spark.isActive == false) {
+      if (this.instrument1.isActivated && this.instrument2.isActivated && spark.isActive == false) {
         if (spark.a.position.distanceTo(spark.b.position) < this.distance) {
 
           // Update sound position and play it

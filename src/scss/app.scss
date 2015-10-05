@@ -20,6 +20,12 @@ body {
   position: relative;
   margin: 0 10px;
   // background: #222;
+  opacity: 0.3;
+  transition: all 0.1s ease-out;
+
+  &.isActivated {
+    opacity: 1;
+  }
 
   &#master {
     background: red;

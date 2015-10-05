@@ -32,6 +32,8 @@ export default class {
     this.output = this.volume;
 
     this.addGui();
+
+    this.setActivated(storage.getOrSet(this.trackId + '/activated', true));
   }
 
   /**
@@ -52,6 +54,28 @@ export default class {
         this.setVolume((100 - e.offsetY) / 100);
       });
     }
+  }
+
+  /**
+   * Sets activated state
+   */
+  setActivated(activated) {
+    this.setMuted(!activated);
+
+    if (this.instrument)
+      this.instrument.setActivated(activated);
+
+    this.$track.classList.toggle('isActivated', activated);
+
+    this.isActivated = activated;
+    storage.set(this.trackId + '/activated', activated);
+  }
+
+  /**
+   * Toggles activated state
+   */
+  toggleActivated() {
+    this.setActivated(!this.isActivated);
   }
 
   /**
@@ -111,7 +135,7 @@ export default class {
     this.volumeValue = volume;
     this.volume.gain.value = volume;
 
-    storage.set('volume.' + this.trackId, volume);
+    storage.set(this.trackId + '/volume', volume);
   }
 
   /**
