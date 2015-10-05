@@ -19,6 +19,8 @@ import VFXLineRaster from './vfx/line-raster';
  */
 export default class {
   constructor() {
+    this.container = new THREE.Object3D();
+
     this.setupMixer();
     this.createInstruments();
     this.populate();
@@ -83,8 +85,6 @@ export default class {
     this.mixer.setTrackVolume(3, 0.2);
 
     // Add sparks
-    this.sparks = [];
-
     let spark1 = new Spark({
       instrument1: instrument1,
       instrument2: instrument2,
@@ -94,7 +94,7 @@ export default class {
         gain: 0.3
       })
     });
-    this.sparks.push(spark1);
+    this.mixer.setInstrumentAt(spark1, 13);
 
     let spark2 = new Spark({
       instrument1: instrument1,
@@ -106,7 +106,7 @@ export default class {
       }),
       vfxs: [new VFXLineRaster()]
     });
-    this.sparks.push(spark2);
+    this.mixer.setInstrumentAt(spark2, 14);
 
     let spark3 = new Spark({
       instrument1: instrument1,
@@ -118,29 +118,16 @@ export default class {
       }),
       vfxs: [new VFXHitRing()]
     });
-    this.sparks.push(spark3);
-
-    for (let spark of this.sparks) {
-      spark.sound.output.connect(this.mixer.master.input);
-    }
+    this.mixer.setInstrumentAt(spark3, 15);
   }
 
   /**
    * Adds visual elements to world
    */
   populate() {
-    this.container = new THREE.Object3D();
-
     for (let track of this.mixer.tracks) {
-      if (track.instrument)
+      if (track.instrument && track.instrument.visuals)
         this.container.add(track.instrument.visuals);
-    }
-
-    for (let spark of this.sparks) {
-      this.container.add(spark.linesContainer);
-
-      for (let vfx of spark.vfxs)
-        this.container.add(vfx.mesh);
     }
   }
 
@@ -149,8 +136,5 @@ export default class {
    */
   update(time) {
     this.mixer.update(time);
-
-    for (let spark of this.sparks)
-      spark.update(time);
   }
 };

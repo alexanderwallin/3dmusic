@@ -18,9 +18,8 @@ export default class {
     this.fxs = [];
     this.fxsOutput = ctx.createGain();
 
-    this.volumeValue = 1;
     this.volume = ctx.createGain();
-    this.volume.gain.value = this.volumeValue;
+    this.setVolume(0.8);
 
     this.levelMeter = new LevelMeter();
 
@@ -39,8 +38,17 @@ export default class {
    */
   addGui() {
     this.$track = document.querySelector('#' + this.trackId);
-    if (this.$track)
-      this.$levelBar = this.$track.querySelector('.levelBar');
+    if (this.$track) {
+      this.$levelBar = this.$track.querySelector('.levelMeter .bar');
+      
+      this.$volume = this.$track.querySelector('.volume');
+      this.$volumeBar = this.$volume.querySelector('.bar');
+      this.$volumeClick = this.$volume.querySelector('.clickArea');
+      this.$volume.addEventListener('click', (e) => {
+        console.log(e);
+        this.setVolume((100 - e.offsetY) / 100);
+      });
+    }
   }
 
   /**
@@ -119,5 +127,9 @@ export default class {
 
     if (this.$levelBar)
       this.$levelBar.style.height = (100 * this.levelMeter.getAudioLevel()) + '%';
+
+    if (this.$volumeBar) {
+      this.$volumeBar.style.height = (100 * this.volumeValue) + '%';
+    }
   }
 }

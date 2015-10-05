@@ -7,14 +7,20 @@ import THREE from 'three';
  */
 export default class {
   constructor(options) {
-    this.linesContainer = new THREE.Object3D();
+    this.visuals = new THREE.Object3D();
     this.lineColor = new THREE.Color(Math.random(), Math.random(), Math.random());
 
     this.sound = options.sound;
     this.connect(options.instrument1, options.instrument2, options.distance);
 
     this.onHit = options.onHit;
+
     this.vfxs  = options.vfxs || [];
+    for (let vfx of this.vfxs)
+      this.visuals.add(vfx.mesh);
+
+    this.input  = this.sound.output;
+    this.output = this.sound.output;
   }
 
   connect(instrument1, instrument2, distance) {
@@ -38,7 +44,7 @@ export default class {
         };
 
         this.sparks.push(sparkInstance);
-        this.linesContainer.add(line);
+        this.visuals.add(line);
       }
     }
   }
