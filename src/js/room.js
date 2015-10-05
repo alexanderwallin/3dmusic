@@ -31,7 +31,7 @@ export default class {
 
     // Axis helper
     this.axisHelper = new THREE.AxisHelper( 600 );
-    // this.scene.add( this.axisHelper );
+    this.scene.add( this.axisHelper );
 
     // Renderer
     this.renderer = new THREE.WebGLRenderer();
@@ -66,8 +66,11 @@ export default class {
 
     TWEEN.update(time);
 
-    if (time)
+    if (time) {
       this.daw.update(time);
+
+      
+    }
 
     this.renderer.render( this.scene, this.camera );
   }

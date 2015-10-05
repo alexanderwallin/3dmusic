@@ -134,6 +134,9 @@ export default class {
       if (track.instrument && track.instrument.visuals)
         this.container.add(track.instrument.visuals);
     }
+
+    this.centerBall = new THREE.Mesh(new THREE.BoxGeometry( 200, 200, 200 ), new THREE.MeshBasicMaterial( { color: 0x333333 } ));
+    this.container.add(this.centerBall);
   }
 
   /**
@@ -141,5 +144,13 @@ export default class {
    */
   update(time) {
     this.mixer.update(time);
+
+    if (this.centerBall) {
+      let ballScale = this.mixer.master.levelMeter.getAudioLevel();
+      this.centerBall.scale.set(ballScale, ballScale, ballScale);
+
+      let rot = this.centerBall.rotation;
+      this.centerBall.rotation.set(rot.x + 0.01, rot.y + 0.01, rot.z + 0.01, rot.order);
+    }
   }
 };
