@@ -34,7 +34,12 @@ export default class {
 
     // Add fx
     // this.mixer.master.addFx(new Reverb({ gain: 0.1 }));
-    this.mixer.master.addFx(new Compressor());
+    this.mixer.master.addFx(new Compressor({
+      ratio: 4,
+      threshold: -20,
+      knee: 4,
+      reduction: -20
+    }));
 
     this.mixer.master.output.connect(ctx.destination);
   }
