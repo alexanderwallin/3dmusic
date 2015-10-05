@@ -26,6 +26,9 @@ export default class {
     this.output = this.volume;
   }
 
+  /**
+   * Sets the instrument and connects it
+   */
   setInstrument(instrument) {
     if (this.instrument) {
       this.instrument.output.disconnect();
@@ -37,6 +40,9 @@ export default class {
     this.instrument.output.connect(this.fxsInput);
   }
 
+  /**
+   * Adds an fx to the fx chain
+   */
   addFx(fx) {
     console.log('addFx', fx);
     if (this.fxs.length == 0) {
@@ -54,19 +60,31 @@ export default class {
     this.fxs.push(fx);
   }
 
+  /**
+   * Removes an fx
+   */
   removeFx(fx) {
     this.fxs.splice(this.fxs.indexOf(fx), 1);
   }
 
+  /**
+   * Removes an fx at a given index
+   */
   removeFxAt(index) {
     this.fxs.splice(index, 1);
   }
 
+  /**
+   * Sets the track volume
+   */
   setVolume(volume) {
     this.volumeValue = volume;
     this.volume.gain.value = volume;
   }
 
+  /**
+   * Sets muted state
+   */
   setMuted(mute) {
     this.volume.gain.value = mute ? 0 : this.volumeValue;
   }

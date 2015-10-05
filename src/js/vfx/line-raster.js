@@ -11,7 +11,7 @@ import TWEEN from 'tween.js';
 export default class {
   constructor() {
     this.mesh = new THREE.Object3D();
-    this.mesh.position.set(0, 0, -200);
+    this.mesh.position.set(0, 0, 0);
     // this.mesh.rotation = Math.random() * Math.PI * 2;
 
     this.numLines = 60;
@@ -26,7 +26,7 @@ export default class {
 
     let opacity       = 0.3 + Math.random() * 0.3;
     let rotationAxis  = new THREE.Vector3(Math.random() - 0.5, Math.random() - 0.5, Math.random() - 0.5);
-    let rotationSpeed = 0.01;
+    let rotationSpeed = Math.random() * 0.04;
 
     let material = new THREE.LineBasicMaterial({
       color: new THREE.Color(Math.random(), Math.random(), Math.random()).multiplyScalar(1.5),

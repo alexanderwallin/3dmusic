@@ -10,6 +10,7 @@ import Sound from './sound';
 import Spark from './spark';
 import Reverb from './fx/reverb';
 import Compressor from './fx/compressor';
+import Tremolo from './fx/tremolo';
 import VFXHitRing from './vfx/hitring';
 import VFXLineRaster from './vfx/line-raster';
 
@@ -65,6 +66,11 @@ export default class {
       audioPath: 'assets/audio/horn.mp3'
     });
     this.mixer.setInstrumentAt(instrument3, 2);
+    this.mixer.tracks[2].addFx(new Tremolo({
+      rate: 0.01,
+      depth: 0.2,
+      origin: 0.8
+    }));
 
     let instrument4 = new Instrument({
       origin: new THREE.Vector3(0, 0, 0),
@@ -145,6 +151,10 @@ export default class {
     for (let track of this.mixer.tracks) {
       if (track.instrument)
         track.instrument.update(time);
+
+      for (let fx of track.fxs)
+        if (fx.update)
+          fx.update(time);
     }
 
     for (let spark of this.sparks)
