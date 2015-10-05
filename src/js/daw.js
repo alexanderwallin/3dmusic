@@ -57,6 +57,7 @@ export default class {
       audioPath: 'assets/audio/organ-lo.mp3'
     });
     this.mixer.setInstrumentAt(instrument1, 0);
+    this.mixer.setTrackVolume(0, 0.4);
 
     let instrument2 = new Instrument({
       origin: new THREE.Vector3(-2000, 0, 0),
@@ -65,6 +66,7 @@ export default class {
       audioPath: 'assets/audio/pipes-lo.mp3'
     });
     this.mixer.setInstrumentAt(instrument2, 1);
+    this.mixer.setTrackVolume(1, 0.5);
 
     let instrument3 = new Instrument({
       origin: new THREE.Vector3(0, 0, 0),
@@ -112,7 +114,7 @@ export default class {
         gain: 0.3
       })
     });
-    this.mixer.setInstrumentAt(spark1, 12);
+    this.mixer.setInstrumentAt(spark1, 11);
 
     let spark2 = new Spark({
       instrument1: instrument1,
@@ -124,7 +126,7 @@ export default class {
       }),
       vfxs: [new VFXLineRaster()]
     });
-    this.mixer.setInstrumentAt(spark2, 13);
+    this.mixer.setInstrumentAt(spark2, 12);
 
     let spark3 = new Spark({
       instrument1: instrument1,
@@ -136,6 +138,7 @@ export default class {
       }),
       vfxs: [new VFXHitRing()]
     });
+    this.mixer.setInstrumentAt(spark3, 13);
 
     let spark4 = new Spark({
       instrument1: instrument2,
@@ -148,10 +151,16 @@ export default class {
       // vfxs: [new VFXHitRing()]
     });
     this.mixer.setInstrumentAt(spark4, 14);
+    this.mixer.setTrackVolume(14, 0.2);
+    this.mixer.tracks[14].addFx(new Tremolo({
+      rate: 0.0006,
+      depth: 0.7,
+      phase: -Math.PI * 0.5
+    }));
 
     let spark5 = new Spark({
-      instrument1: instrument3,
-      instrument2: instrument5,
+      instrument1: instrument2,
+      instrument2: instrument3,
       distance: 800,
       sound: new Sound({
         audioPath: 'assets/audio/bitbell2.mp3',
@@ -160,6 +169,13 @@ export default class {
       // vfxs: [new VFXHitRing()]
     });
     this.mixer.setInstrumentAt(spark5, 15);
+    this.mixer.setTrackVolume(15, 0.2);
+    this.mixer.tracks[15].addFx(new Tremolo({
+      rate: 0.001,
+      depth: 0.7,
+      phase: -Math.PI * 0.65
+    }));
+
   }
 
   /**
