@@ -87,7 +87,20 @@ export default class {
       audioPath: 'assets/audio/pipes.mp3'
     });
     this.mixer.setInstrumentAt(instrument4, 3);
+    this.mixer.tracks[3].addFx(new Tremolo({
+      rate: 0.0002
+    }));
     this.mixer.setTrackVolume(3, 0.2);
+
+    let instrument5 = new Instrument({
+      origin: new THREE.Vector3(0, 0, 0),
+      rotation: new THREE.Vector3(0.3, -1, -0.1).multiplyScalar(1.4),
+      rotationSpeed: new THREE.Vector3(0.0011, 0.0007, -0.0017).multiplyScalar(rotationSpeedScalar),
+      gain: 0.05,
+      audioPath: 'assets/audio/zelda.mp3'
+    });
+    this.mixer.setInstrumentAt(instrument5, 4);
+    // this.mixer.setTrackVolume(3, 0.2);
 
     // Add sparks
     let spark1 = new Spark({
@@ -99,7 +112,7 @@ export default class {
         gain: 0.3
       })
     });
-    this.mixer.setInstrumentAt(spark1, 13);
+    this.mixer.setInstrumentAt(spark1, 12);
 
     let spark2 = new Spark({
       instrument1: instrument1,
@@ -111,7 +124,7 @@ export default class {
       }),
       vfxs: [new VFXLineRaster()]
     });
-    this.mixer.setInstrumentAt(spark2, 14);
+    this.mixer.setInstrumentAt(spark2, 13);
 
     let spark3 = new Spark({
       instrument1: instrument1,
@@ -123,7 +136,30 @@ export default class {
       }),
       vfxs: [new VFXHitRing()]
     });
-    this.mixer.setInstrumentAt(spark3, 15);
+
+    let spark4 = new Spark({
+      instrument1: instrument2,
+      instrument2: instrument5,
+      distance: 800,
+      sound: new Sound({
+        audioPath: 'assets/audio/bitbell1.mp3',
+        gain: 1
+      }),
+      // vfxs: [new VFXHitRing()]
+    });
+    this.mixer.setInstrumentAt(spark4, 14);
+
+    let spark5 = new Spark({
+      instrument1: instrument3,
+      instrument2: instrument5,
+      distance: 800,
+      sound: new Sound({
+        audioPath: 'assets/audio/bitbell2.mp3',
+        gain: 1
+      }),
+      // vfxs: [new VFXHitRing()]
+    });
+    this.mixer.setInstrumentAt(spark5, 15);
   }
 
   /**
@@ -135,7 +171,7 @@ export default class {
         this.container.add(track.instrument.visuals);
     }
 
-    this.centerBall = new THREE.Mesh(new THREE.BoxGeometry( 200, 200, 200 ), new THREE.MeshBasicMaterial( { color: 0x333333 } ));
+    this.centerBall = new THREE.Mesh(new THREE.BoxGeometry( 120, 120, 120 ), new THREE.MeshBasicMaterial( { color: 0x333333 } ));
     this.container.add(this.centerBall);
   }
 

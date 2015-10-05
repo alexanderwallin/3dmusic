@@ -22,8 +22,6 @@ export default class {
 
     // Camera
     this.camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 1, 10000 );
-    // this.camera.position.x = 200;
-    this.camera.position.y = 100;
     this.camera.position.z = 1000;
 
     // Scene
@@ -31,7 +29,7 @@ export default class {
 
     // Axis helper
     this.axisHelper = new THREE.AxisHelper( 600 );
-    this.scene.add( this.axisHelper );
+    // this.scene.add( this.axisHelper );
 
     // Renderer
     this.renderer = new THREE.WebGLRenderer();
@@ -69,7 +67,7 @@ export default class {
     if (time) {
       this.daw.update(time);
 
-      
+      // this.camera.rotation.z += 0.01;
     }
 
     this.renderer.render( this.scene, this.camera );

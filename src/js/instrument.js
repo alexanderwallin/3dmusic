@@ -37,13 +37,13 @@ export default class {
 
     // Cube 1
     let geometry1 = new THREE.SphereGeometry( 20, 20 );
-    let material1 = new THREE.MeshBasicMaterial( { color: this.color, transparent: true, opacity: 1 } );
+    let material1 = new THREE.MeshBasicMaterial( { color: this.color, transparent: true, opacity: 0 } );
     let instance1 = new THREE.Mesh(geometry1, material1);
     this.instances.push(instance1);
 
     // Cube 2
     let geometry2 = new THREE.SphereGeometry( 20, 20 );
-    let material2 = new THREE.MeshBasicMaterial( { color: this.color, transparent: true, opacity: 1 } );
+    let material2 = new THREE.MeshBasicMaterial( { color: this.color, transparent: true, opacity: 0 } );
     let instance2 = new THREE.Mesh(geometry2, material2);
     this.instances.push(instance2);
 
@@ -74,9 +74,7 @@ export default class {
    * Sets activated state
    */
   setActivated(activated) {
-    if (activated != this.isActivated) {
-      this.fadeVisuals(activated ? 1 : 0);
-    }
+    this.fadeVisuals(activated ? 1 : 0);
 
     this.isActivated = activated;
   }
@@ -87,8 +85,8 @@ export default class {
   fadeVisuals(opacity) {
     let _this = this;
 
-    let tween = new TWEEN.Tween({ opacity: opacity == 1 ? 0 : 1 })
-      .to({ opacity: opacity }, 300)
+    let tween = new TWEEN.Tween({ opacity: this.instances[0].material.opacity })
+      .to({ opacity: opacity }, 600)
       .easing(TWEEN.Easing.Linear.None)
       .onUpdate(function() {
         for (let mesh of _this.instances) {

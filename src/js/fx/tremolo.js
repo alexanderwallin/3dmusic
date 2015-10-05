@@ -8,6 +8,7 @@ import LFO from '../lfo';
  */
 export default class {
   constructor(options) {
+    options.phase = options.phase || -Math.PI / 2;
     this.lfo = new LFO(options);
 
     let gain = ctx.createGain();

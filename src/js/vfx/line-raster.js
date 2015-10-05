@@ -14,7 +14,7 @@ export default class {
     this.mesh.position.set(0, 0, 0);
     // this.mesh.rotation = Math.random() * Math.PI * 2;
 
-    this.numLines = 60;
+    this.numLines = 90;
   }
 
   trigger() {
@@ -26,7 +26,7 @@ export default class {
 
     let opacity       = 0.3 + Math.random() * 0.3;
     let rotationAxis  = new THREE.Vector3(Math.random() - 0.5, Math.random() - 0.5, Math.random() - 0.5);
-    let rotationSpeed = Math.random() * 0.04;
+    let rotationSpeed = Math.random() * 0.03;
 
     let material = new THREE.LineBasicMaterial({
       color: new THREE.Color(Math.random(), Math.random(), Math.random()).multiplyScalar(1.5),
@@ -37,8 +37,8 @@ export default class {
     for (let i = 0; i < this.numLines; i++) {
       let lineGeometry = new THREE.Geometry();
       lineGeometry.vertices.push(
-        new THREE.Vector3(-3000, -1000 + (i/this.numLines) * 2000, 0),
-        new THREE.Vector3(3000, -1000 + (i/this.numLines) * 2000, 0)
+        new THREE.Vector3(-3000, -3000 + (i/this.numLines) * 6000, 0),
+        new THREE.Vector3(3000, -3000 + (i/this.numLines) * 6000, 0)
       );
       let line = new THREE.Line(lineGeometry, material);
 

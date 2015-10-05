@@ -32,8 +32,6 @@ export default class {
     this.output = this.volume;
 
     this.addGui();
-
-    this.setActivated(storage.getOrSet(this.trackId + '/activated', true));
   }
 
   /**
@@ -92,6 +90,8 @@ export default class {
     this.instrument.output.connect(this.fxsInput);
 
     this.$track.classList.add('hasInstrument');
+
+    this.setActivated(storage.getOrSet(this.trackId + '/activated', true));
   }
 
   /**
@@ -159,8 +159,7 @@ export default class {
     if (this.$levelBar)
       this.$levelBar.style.height = (100 * this.levelMeter.getAudioLevel()) + '%';
 
-    if (this.$volumeBar) {
+    if (this.$volumeBar)
       this.$volumeBar.style.height = (100 * this.volumeValue) + '%';
-    }
   }
 }

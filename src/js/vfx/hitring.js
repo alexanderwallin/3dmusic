@@ -27,7 +27,6 @@ export default class {
     var segments = 32;
 
     var circleGeometry = new THREE.CircleGeometry( radius, segments );
-    circleGeometry.dynamic = true;
     var circle = new THREE.Mesh( circleGeometry, material );
 
     this.mesh.add(circle);

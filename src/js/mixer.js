@@ -31,18 +31,24 @@ export default class {
    * Sets up controls
    */
   setupControls() {
+    this.isMixerVisible = false;
+    this.$mixer = document.querySelector('#mixer');
+
     window.addEventListener('keyup', (e) => {
       if (e.which == 77)
         this.toggleMute();
-    });
 
-    window.addEventListener('keyup', (e) => {
       if (e.which >= 48 && e.which <= 57) {
         let trackIndex = e.which - 49;
         if (e.altKey)
           trackIndex += 10;
 
         this.tracks[trackIndex].toggleActivated();
+      }
+
+      if (e.which == 86) {
+        this.isMixerVisible = !this.isMixerVisible;
+        this.$mixer.classList.toggle('visible', this.isMixerVisible);
       }
     });
   }
