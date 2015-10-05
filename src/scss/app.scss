@@ -3,6 +3,19 @@ body {
   margin: 0;
 }
 
+#title {
+  position: fixed;
+  top: 10px;
+  left: 10px;
+  font-size: 7px;
+  color: white;
+  font-family: sans-serif, monospace;
+  // font-weight: bold;
+  text-transform: uppercase;
+  opacity: 0.2;
+  letter-spacing: 2px;
+}
+
 #mixer {
   display: flex;
   position: absolute;
