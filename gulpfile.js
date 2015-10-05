@@ -64,7 +64,7 @@ gulp.task('audio:convert', function() {
     .pipe(gulp.dest('./src/audio'));
 })
 
-gulp.task('watch', ['livereload', 'watch:js', 'watch:views', 'watch:audio']);
+gulp.task('watch', ['livereload', 'watch:js', 'watch:css', 'watch:views', 'watch:audio']);
 
 gulp.task('livereload', function() {
   livereload.listen();
@@ -72,6 +72,10 @@ gulp.task('livereload', function() {
 
 gulp.task('watch:js', function() {
   gulp.watch('./src/js/**/*.js', ['build:js']);
+});
+
+gulp.task('watch:css', function() {
+  gulp.watch('./src/scss/**/*.scss', ['build:css']);
 });
 
 gulp.task('watch:views', function() {

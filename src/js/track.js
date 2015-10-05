@@ -1,12 +1,15 @@
 
 // App libs
 import ctx from './audio-context'
+import LevelMeter from './level-meter';
 
 /**
  * Track
  */
 export default class {
-  constructor() {
+  constructor(index) {
+    this.trackId = index;
+
     this.input = ctx.createGain();
 
     this.instrument = null;
@@ -19,11 +22,25 @@ export default class {
     this.volume = ctx.createGain();
     this.volume.gain.value = this.volumeValue;
 
+    this.levelMeter = new LevelMeter();
+
     this.input.connect(this.fxsInput);
     this.fxsInput.connect(this.fxsOutput);
     this.fxsOutput.connect(this.volume);
+    this.volume.connect(this.levelMeter.input);
 
     this.output = this.volume;
+
+    this.addGui();
+  }
+
+  /**
+   * Adds track GUI
+   */
+  addGui() {
+    this.$track = document.querySelector('#' + this.trackId);
+    if (this.$track)
+      this.$levelBar = this.$track.querySelector('.levelBar');
   }
 
   /**
@@ -87,5 +104,20 @@ export default class {
    */
   setMuted(mute) {
     this.volume.gain.value = mute ? 0 : this.volumeValue;
+  }
+
+  /**
+   * Update
+   */
+  update(time) {
+    if (this.instrument)
+      this.instrument.update(time);
+
+    for (let fx of this.fxs)
+      if (fx.update)
+        fx.update(time);
+
+    if (this.$levelBar)
+      this.$levelBar.style.height = (100 * this.levelMeter.getAudioLevel()) + '%';
   }
 }

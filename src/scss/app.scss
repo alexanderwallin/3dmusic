@@ -2,3 +2,35 @@
 body {
   margin: 0;
 }
+
+#mixer {
+  display: flex;
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  left: 0;
+  height: 100px;
+  background-color: #000;
+  opacity: 0.2;
+}
+
+.track {
+  flex-grow: 1;
+  position: relative;
+  margin-right: 1px;
+  background: #222;
+
+  &#master {
+    background: red;
+  }
+
+  .levelBar {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    height: 0;
+    background: yellow; 
+    text-indent: -999em;
+  }
+}

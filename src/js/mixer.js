@@ -11,18 +11,24 @@ export default class {
   constructor() {
     this.isMuted = false;
 
-    this.master = new Track();
+    // Master track
+    this.master = new Track('master');
 
+    // Tracks
     this.tracks = new Array(numTracks);
     for (let i = 0; i < numTracks; i++) {
-      let track = new Track();
+      let track = new Track('track' + (i+1));
       track.output.connect(this.master.input);
       this.tracks[i] = track;
     }
 
+    // Controls
     this.setupControls();
   }
 
+  /**
+   * Sets up controls
+   */
   setupControls() {
     window.addEventListener('keyup', (e) => {
       if (e.which == 77)
@@ -30,16 +36,35 @@ export default class {
     });
   }
 
+  /**
+   * Toggles mute state
+   */
   toggleMute() {
     this.isMuted = !this.isMuted;
     this.master.setMuted(this.isMuted);
   }
 
+  /**
+   * Sets an instrument to a track
+   */
   setInstrumentAt(instrument, index) {
     this.tracks[index].setInstrument(instrument);
   }
 
+  /**
+   * Sets a track's volume
+   */
   setTrackVolume(index, volume) {
     this.tracks[index].setVolume(volume);
+  }
+
+  /**
+   * Update
+   */
+  update(time) {
+    for (let track of this.tracks)
+      track.update(time);
+
+    this.master.update(time);
   }
 }

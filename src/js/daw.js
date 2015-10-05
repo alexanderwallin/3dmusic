@@ -148,14 +148,7 @@ export default class {
    * Next frame plz
    */
   update(time) {
-    for (let track of this.mixer.tracks) {
-      if (track.instrument)
-        track.instrument.update(time);
-
-      for (let fx of track.fxs)
-        if (fx.update)
-          fx.update(time);
-    }
+    this.mixer.update(time);
 
     for (let spark of this.sparks)
       spark.update(time);
