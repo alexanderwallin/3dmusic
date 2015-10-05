@@ -1,5 +1,6 @@
 
 // App libs
+import { storage } from './storage';
 import ctx from './audio-context'
 import LevelMeter from './level-meter';
 
@@ -19,7 +20,7 @@ export default class {
     this.fxsOutput = ctx.createGain();
 
     this.volume = ctx.createGain();
-    this.setVolume(0.8);
+    this.setVolume(storage.getOrSet('volume.' + this.trackId, 0.8));
 
     this.levelMeter = new LevelMeter();
 
@@ -38,6 +39,8 @@ export default class {
    */
   addGui() {
     this.$track = document.querySelector('#' + this.trackId);
+    this.$track.classList.add('isActive');
+
     if (this.$track) {
       this.$levelBar = this.$track.querySelector('.levelMeter .bar');
       
@@ -63,6 +66,8 @@ export default class {
 
     this.instrument = instrument;
     this.instrument.output.connect(this.fxsInput);
+
+    this.$track.classList.add('hasInstrument');
   }
 
   /**
@@ -105,6 +110,8 @@ export default class {
   setVolume(volume) {
     this.volumeValue = volume;
     this.volume.gain.value = volume;
+
+    storage.set('volume.' + this.trackId, volume);
   }
 
   /**
