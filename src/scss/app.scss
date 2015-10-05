@@ -27,11 +27,15 @@ body {
   position: relative;
   margin: 0 10px;
   // background: #222;
-  opacity: 0.3;
+  opacity: 0.4;
   transition: all 0.1s ease-out;
 
   &.isActivated {
     opacity: 1;
+  }
+
+  &:not(.hasInstrument) {
+    opacity: 0.1 !important;
   }
 
   &#master {
@@ -42,6 +46,19 @@ body {
     .levelBar {
       background: turquoise;
     }
+  }
+
+  &::after {
+    content: attr(data-track);
+    position: absolute;
+    bottom: 100%;
+    left: 0;
+    right: 0;
+    color: white;
+    font-family: monospace;
+    font-size: 10px;
+    text-align: center;
+    padding: 10px;
   }
 
   .bar {

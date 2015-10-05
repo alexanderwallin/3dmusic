@@ -20,7 +20,7 @@ export default class {
     this.fxsOutput = ctx.createGain();
 
     this.volume = ctx.createGain();
-    this.setVolume(storage.getOrSet('volume.' + this.trackId, 0.8));
+    this.setVolume(storage.getOrSet(this.trackId + '/volume', 0.8));
 
     this.levelMeter = new LevelMeter();
 
@@ -58,6 +58,7 @@ export default class {
    * Sets activated state
    */
   setActivated(activated) {
+    console.log('track setActivated', activated);
     this.setMuted(!activated);
 
     if (this.instrument)
@@ -91,7 +92,7 @@ export default class {
 
     this.$track.classList.add('hasInstrument');
 
-    this.setActivated(storage.getOrSet(this.trackId + '/activated', true));
+    this.setActivated(false);
   }
 
   /**
@@ -142,6 +143,7 @@ export default class {
    * Sets muted state
    */
   setMuted(mute) {
+    console.log(this.trackId, 'setMuted', mute);
     this.volume.gain.value = mute ? 0 : this.volumeValue;
   }
 

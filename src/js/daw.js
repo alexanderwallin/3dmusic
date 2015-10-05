@@ -56,30 +56,9 @@ export default class {
       rotationSpeed: new THREE.Vector3(0.005, 0, 0.005).multiplyScalar(rotationSpeedScalar),
       audioPath: 'assets/audio/organ-lo.mp3'
     });
-    this.mixer.setInstrumentAt(instrument1, 0);
     this.mixer.setTrackVolume(0, 0.4);
-
-    let instrument2 = new Instrument({
-      origin: new THREE.Vector3(-2000, 0, 0),
-      rotation: new THREE.Vector3(-1, 1, 1),
-      rotationSpeed: new THREE.Vector3(0.0055, 0.001, 0.0055).multiplyScalar(rotationSpeedScalar),
-      audioPath: 'assets/audio/pipes-lo.mp3'
-    });
-    this.mixer.setInstrumentAt(instrument2, 1);
-    this.mixer.setTrackVolume(1, 0.5);
-
-    let instrument3 = new Instrument({
-      origin: new THREE.Vector3(0, 0, 0),
-      rotation: new THREE.Vector3(-1, 1, 1),
-      rotationSpeed: new THREE.Vector3(0.0016, 0.0016, 0.0043).multiplyScalar(rotationSpeedScalar),
-      audioPath: 'assets/audio/horn.mp3'
-    });
-    this.mixer.setInstrumentAt(instrument3, 2);
-    this.mixer.tracks[2].addFx(new Tremolo({
-      rate: 0.01,
-      depth: 0.2,
-      origin: 0.8
-    }));
+    this.mixer.setInstrumentAt(instrument1, 0);
+    this.mixer.tracks[0].setActivated(true);
 
     let instrument4 = new Instrument({
       origin: new THREE.Vector3(0, 0, 0),
@@ -88,11 +67,11 @@ export default class {
       gain: 0.05,
       audioPath: 'assets/audio/pipes.mp3'
     });
-    this.mixer.setInstrumentAt(instrument4, 3);
-    this.mixer.tracks[3].addFx(new Tremolo({
+    this.mixer.setTrackVolume(1, 0.2);
+    this.mixer.setInstrumentAt(instrument4, 1);
+    this.mixer.tracks[1].addFx(new Tremolo({
       rate: 0.0002
     }));
-    this.mixer.setTrackVolume(3, 0.2);
 
     let instrument5 = new Instrument({
       origin: new THREE.Vector3(0, 0, 0),
@@ -101,8 +80,30 @@ export default class {
       gain: 0.05,
       audioPath: 'assets/audio/zelda.mp3'
     });
-    this.mixer.setInstrumentAt(instrument5, 4);
+    this.mixer.setInstrumentAt(instrument5, 2);
     // this.mixer.setTrackVolume(3, 0.2);
+
+    let instrument2 = new Instrument({
+      origin: new THREE.Vector3(-2000, 0, 0),
+      rotation: new THREE.Vector3(-1, 1, 1),
+      rotationSpeed: new THREE.Vector3(0.0055, 0.001, 0.0055).multiplyScalar(rotationSpeedScalar),
+      audioPath: 'assets/audio/pipes-lo.mp3'
+    });
+    this.mixer.setTrackVolume(3, 0.5);
+    this.mixer.setInstrumentAt(instrument2, 3);
+
+    let instrument3 = new Instrument({
+      origin: new THREE.Vector3(0, 0, 0),
+      rotation: new THREE.Vector3(-1, 1, 1),
+      rotationSpeed: new THREE.Vector3(0.0016, 0.0016, 0.0043).multiplyScalar(rotationSpeedScalar),
+      audioPath: 'assets/audio/horn.mp3'
+    });
+    this.mixer.setInstrumentAt(instrument3, 4);
+    this.mixer.tracks[4].addFx(new Tremolo({
+      rate: 0.01,
+      depth: 0.2,
+      origin: 0.8
+    }));
 
     // Add sparks
     let spark1 = new Spark({
@@ -115,10 +116,11 @@ export default class {
       })
     });
     this.mixer.setInstrumentAt(spark1, 11);
+    this.mixer.tracks[11].setActivated(true);
 
     let spark2 = new Spark({
       instrument1: instrument1,
-      instrument2: instrument3,
+      instrument2: instrument4,
       distance: 1000,
       sound: new Sound({
         audioPath: 'assets/audio/bass-short.mp3',
@@ -127,10 +129,11 @@ export default class {
       vfxs: [new VFXLineRaster()]
     });
     this.mixer.setInstrumentAt(spark2, 12);
+    this.mixer.tracks[12].setActivated(true);
 
     let spark3 = new Spark({
-      instrument1: instrument1,
-      instrument2: instrument4,
+      instrument1: instrument2,
+      instrument2: instrument5,
       distance: 800,
       sound: new Sound({
         audioPath: 'assets/audio/kick.mp3',
@@ -139,9 +142,10 @@ export default class {
       vfxs: [new VFXHitRing()]
     });
     this.mixer.setInstrumentAt(spark3, 13);
+    this.mixer.tracks[13].setActivated(true);
 
     let spark4 = new Spark({
-      instrument1: instrument2,
+      instrument1: instrument4,
       instrument2: instrument5,
       distance: 800,
       sound: new Sound({
@@ -150,8 +154,8 @@ export default class {
       }),
       // vfxs: [new VFXHitRing()]
     });
-    this.mixer.setInstrumentAt(spark4, 14);
     this.mixer.setTrackVolume(14, 0.2);
+    this.mixer.setInstrumentAt(spark4, 14);
     this.mixer.tracks[14].addFx(new Tremolo({
       rate: 0.0006,
       depth: 0.7,
@@ -168,8 +172,8 @@ export default class {
       }),
       // vfxs: [new VFXHitRing()]
     });
-    this.mixer.setInstrumentAt(spark5, 15);
     this.mixer.setTrackVolume(15, 0.2);
+    this.mixer.setInstrumentAt(spark5, 15);
     this.mixer.tracks[15].addFx(new Tremolo({
       rate: 0.001,
       depth: 0.7,
