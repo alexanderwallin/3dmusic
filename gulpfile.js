@@ -1,14 +1,15 @@
+'use strict';
 
-var gulp       = require('gulp'),
-    rimraf     = require('gulp-rimraf'),
-    jade       = require('gulp-jade'),
-    browserify = require('gulp-browserify'),
-    babelify   = require('babelify'),
-    sass       = require('gulp-sass'),
-    ffmpeg     = require('gulp-fluent-ffmpeg'),
-    sourcemaps = require('gulp-sourcemaps')
-    webserver  = require('gulp-webserver'),
-    livereload = require('gulp-livereload');
+const gulp       = require('gulp');
+const rimraf     = require('gulp-rimraf');
+const jade       = require('gulp-jade');
+const browserify = require('gulp-browserify');
+const babelify   = require('babelify');
+const sass       = require('gulp-sass');
+const ffmpeg     = require('gulp-fluent-ffmpeg');
+const sourcemaps = require('gulp-sourcemaps');
+const webserver  = require('gulp-webserver');
+const livereload = require('gulp-livereload');
 
 gulp.task('start', ['build', 'watch', 'serve']);
 
