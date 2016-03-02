@@ -21,8 +21,6 @@ export default class {
 
     this.input  = this.sound.output;
     this.output = this.sound.output;
-
-    this.setActivated(true);
   }
 
   connect(instrument1, instrument2, distance) {
@@ -55,7 +53,13 @@ export default class {
     this.isActivated = activated;
   }
 
-  update() {
+  update(time, audioLevel) {
+    for (let vfx of this.vfxs) {
+      if (vfx.update) {
+        vfx.update(time, audioLevel);
+      }
+    }
+
     for (let spark of this.sparks) {
       spark.sparkLine.visible = spark.isActive;
 
@@ -71,7 +75,7 @@ export default class {
             this.onHit();
 
           for (let vfx of this.vfxs)
-            vfx.trigger();
+            vfx.trigger(time, audioLevel);
 
           spark.isActive = true;
         }

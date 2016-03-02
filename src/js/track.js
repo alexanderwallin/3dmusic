@@ -20,7 +20,7 @@ export default class {
     this.fxsOutput = ctx.createGain();
 
     this.volume = ctx.createGain();
-    this.setVolume(storage.getOrSet(this.trackId + '/volume', 0.8));
+    this.setVolume(storage.getOrSet(this.trackId + '/volume', 0.4));
 
     this.levelMeter = new LevelMeter();
 
@@ -32,6 +32,8 @@ export default class {
     this.output = this.volume;
 
     this.addGui();
+
+    this.setActivated(storage.getOrSet(`${this.trackId}/activated`, false));
   }
 
   /**
@@ -43,7 +45,7 @@ export default class {
 
     if (this.$track) {
       this.$levelBar = this.$track.querySelector('.levelMeter .bar');
-      
+
       this.$volume = this.$track.querySelector('.volume');
       this.$volumeBar = this.$volume.querySelector('.bar');
       this.$volumeClick = this.$volume.querySelector('.clickArea');
@@ -67,7 +69,7 @@ export default class {
     this.$track.classList.toggle('isActivated', activated);
 
     this.isActivated = activated;
-    storage.set(this.trackId + '/activated', activated);
+    storage.set(`${this.trackId}/activated`, activated);
   }
 
   /**
@@ -92,7 +94,7 @@ export default class {
 
     this.$track.classList.add('hasInstrument');
 
-    this.setActivated(false);
+    // this.setActivated(false);
   }
 
   /**
@@ -151,15 +153,17 @@ export default class {
    * Update
    */
   update(time) {
+    const currTrackAudioLevel = this.levelMeter.getAudioLevel();
+
     if (this.instrument)
-      this.instrument.update(time);
+      this.instrument.update(time, currTrackAudioLevel);
 
     for (let fx of this.fxs)
       if (fx.update)
         fx.update(time);
 
     if (this.$levelBar)
-      this.$levelBar.style.height = (100 * this.levelMeter.getAudioLevel()) + '%';
+      this.$levelBar.style.height = (100 * currTrackAudioLevel) + '%';
 
     if (this.$volumeBar)
       this.$volumeBar.style.height = (100 * this.volumeValue) + '%';

@@ -1,6 +1,7 @@
 
 // App libs
 import Track from './track';
+import { storage } from './storage';
 
 let numTracks = 16;
 
@@ -10,16 +11,18 @@ let numTracks = 16;
 export default class {
   constructor() {
     this.isActivated = true;
-    this.isMuted = false;
+    this.isMuted = storage.getOrSet('master/muted', false);
 
     // Master track
     this.master = new Track('master');
+    this.master.setMuted(this.isMuted);
 
     // Tracks
-    this.tracks = new Array(numTracks);
+    this.tracks = []; //new Array(numTracks);
     for (let i = 0; i < numTracks; i++) {
-      let track = new Track('track' + (i+1));
+      let track = new Track(`track${i + 1}`);
       track.output.connect(this.master.input);
+      track.setActivated(false);
       this.tracks[i] = track;
     }
 
@@ -59,6 +62,7 @@ export default class {
   toggleMute() {
     this.isMuted = !this.isMuted;
     this.master.setMuted(this.isMuted);
+    storage.set('master/muted', this.isMuted);
   }
 
   /**
@@ -66,6 +70,7 @@ export default class {
    */
   setInstrumentAt(instrument, index) {
     this.tracks[index].setInstrument(instrument);
+    this.tracks[index].setActivated(storage.getOrSet(`track${index+1}/activated`, false));
   }
 
   /**

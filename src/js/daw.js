@@ -3,6 +3,7 @@
 import THREE from 'three';
 
 // App libs
+import { storage } from './storage';
 import ctx from './audio-context';
 import Mixer from './mixer';
 import Instrument from './instrument';
@@ -13,6 +14,7 @@ import Compressor from './fx/compressor';
 import Tremolo from './fx/tremolo';
 import VFXHitRing from './vfx/hitring';
 import VFXLineRaster from './vfx/line-raster';
+import VFXReactiveWeb from './vfx/reactive-web';
 
 /**
  * DAW
@@ -152,7 +154,9 @@ export default class {
         audioPath: 'assets/audio/bitbell1.mp3',
         gain: 1
       }),
-      // vfxs: [new VFXHitRing()]
+      vfxs: [new VFXReactiveWeb({
+        origin: new THREE.Vector3(0, -300, 0),
+      })]
     });
     this.mixer.setTrackVolume(14, 0.2);
     this.mixer.setInstrumentAt(spark4, 14);
@@ -161,6 +165,7 @@ export default class {
       depth: 0.7,
       phase: -Math.PI * 0.5
     }));
+    this.mixer.tracks[14].setActivated(true);
 
     let spark5 = new Spark({
       instrument1: instrument2,
@@ -170,7 +175,9 @@ export default class {
         audioPath: 'assets/audio/bitbell2.mp3',
         gain: 1
       }),
-      // vfxs: [new VFXHitRing()]
+      vfxs: [new VFXReactiveWeb({
+        origin: new THREE.Vector3(0, 300, 0),
+      })]
     });
     this.mixer.setTrackVolume(15, 0.2);
     this.mixer.setInstrumentAt(spark5, 15);
@@ -179,7 +186,6 @@ export default class {
       depth: 0.7,
       phase: -Math.PI * 0.65
     }));
-
   }
 
   /**
@@ -202,7 +208,7 @@ export default class {
     this.mixer.update(time);
 
     if (this.centerBall) {
-      let ballScale = this.mixer.master.levelMeter.getAudioLevel();
+      let ballScale = Math.max(0.01, this.mixer.master.levelMeter.getAudioLevel());
       this.centerBall.scale.set(ballScale, ballScale, ballScale);
 
       let rot = this.centerBall.rotation;

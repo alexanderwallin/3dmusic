@@ -6,6 +6,7 @@ import TWEEN from 'tween.js';
 // App libs
 import OrbitMovement from './movement-orbit';
 import Sound from './sound';
+import Glow from './vfx/glow';
 import ctx from './audio-context';
 
 /**
@@ -54,6 +55,11 @@ export default class {
       instance.userData.positionStart = instance.position.clone();
       this.visuals.add(instance);
 
+      // Volume glow
+      const instanceGlow = new Glow(i, instance);
+      instance.userData.glow = instanceGlow;
+      this.visuals.add(instance.userData.glow.mesh);
+
       let sound = new Sound({
         audioPath: this.audioPath
       });
@@ -62,7 +68,7 @@ export default class {
       sound.play();
       this.sounds[i] = sound;
     }
-    
+
     // Add a movement pattern
     this.movement               = new OrbitMovement();
     this.movement.numObjects    = this.instances.length;
@@ -99,7 +105,7 @@ export default class {
   /**
    * Updates sound instances positions
    */
-  update(time) {
+  update(time, audioLevel = 0) {
 
     // Adjust positions according to the movement
     for (let i in this.instances) {
@@ -107,6 +113,9 @@ export default class {
       let positionDiff = this.movement.getObjectPositionDiff(i, time);
       let newPosition = instance.userData.positionStart.clone().add(positionDiff);
       instance.position.fromArray(newPosition.toArray());
+
+      // Update glow
+      instance.userData.glow.update(time, audioLevel);
 
       // console.log('newPosition', newPosition);
       this.sounds[i].panner.setPosition(newPosition.x, newPosition.y, newPosition.z);
