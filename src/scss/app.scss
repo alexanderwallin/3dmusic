@@ -8,13 +8,14 @@ body {
   position: fixed;
   top: 10px;
   left: 10px;
-  font-size: 7px;
+  font-size: 9px;
   color: white;
-  font-family: sans-serif, monospace;
+  font-family: 'Helvetica Neue', sans-serif, monospace;
   // font-weight: bold;
   text-transform: uppercase;
-  opacity: 0.2;
+  opacity: 0.5;
   letter-spacing: 2px;
+  line-height: 2;
 }
 
 #mixer {
@@ -73,7 +74,13 @@ body {
     font-family: monospace;
     font-size: 10px;
     text-align: center;
-    padding: 10px;
+    padding: 10px 0;
+    border-bottom: 1px solid transparent;
+  }
+
+  &.isActivated::after {
+    color: #FFF010;
+    border-color: #FFF010;
   }
 
   .bar {
