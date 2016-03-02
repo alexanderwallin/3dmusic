@@ -43,7 +43,7 @@ class Glow {
   }
 
   getScaleFromAudioLevel(audioLevel) {
-    return 8 * audioLevel;
+    return Math.max(0.01, 8 * audioLevel);
   }
 
   update(time, audioLevel) {
