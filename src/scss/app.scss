@@ -4,10 +4,9 @@ body {
   overflow: hidden;
 }
 
-#title {
+.info {
   position: fixed;
   top: 10px;
-  left: 10px;
   font-size: 9px;
   color: white;
   font-family: 'Helvetica Neue', sans-serif, monospace;
@@ -16,6 +15,15 @@ body {
   opacity: 0.5;
   letter-spacing: 2px;
   line-height: 2;
+}
+
+#title {
+  left: 10px;
+}
+
+#version {
+  right: 10px;
+  opacity: 0.3;
 }
 
 #mixer {
