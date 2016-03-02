@@ -10,6 +10,7 @@ import LevelMeter from './level-meter';
 export default class {
   constructor(index) {
     this.trackId = index;
+    this.isMuted = true;
 
     this.input = ctx.createGain();
 
@@ -20,7 +21,7 @@ export default class {
     this.fxsOutput = ctx.createGain();
 
     this.volume = ctx.createGain();
-    this.setVolume(storage.getOrSet(this.trackId + '/volume', 0.4));
+    this.volumeValue = storage.getOrSet(this.trackId + '/volume', 0.4);
 
     this.levelMeter = new LevelMeter();
 
@@ -32,8 +33,6 @@ export default class {
     this.output = this.volume;
 
     this.addGui();
-
-    this.setActivated(storage.getOrSet(`${this.trackId}/activated`, false));
   }
 
   /**
@@ -60,7 +59,6 @@ export default class {
    * Sets activated state
    */
   setActivated(activated) {
-    console.log('track setActivated', activated);
     this.setMuted(!activated);
 
     if (this.instrument)
@@ -93,8 +91,6 @@ export default class {
     this.instrument.output.connect(this.fxsInput);
 
     this.$track.classList.add('hasInstrument');
-
-    // this.setActivated(false);
   }
 
   /**
@@ -135,10 +131,13 @@ export default class {
    * Sets the track volume
    */
   setVolume(volume) {
-    this.volumeValue = volume;
-    this.volume.gain.value = volume;
+    console.log(this.trackId, 'setVolume', volume);
 
+    this.volumeValue = volume;
     storage.set(this.trackId + '/volume', volume);
+
+    if (!this.isMuted)
+      this.volume.gain.value = volume;
   }
 
   /**
@@ -147,6 +146,7 @@ export default class {
   setMuted(mute) {
     console.log(this.trackId, 'setMuted', mute);
     this.volume.gain.value = mute ? 0 : this.volumeValue;
+    this.isMuted = mute;
   }
 
   /**

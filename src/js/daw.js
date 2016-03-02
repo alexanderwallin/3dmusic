@@ -60,7 +60,6 @@ export default class {
     });
     this.mixer.setTrackVolume(0, 0.4);
     this.mixer.setInstrumentAt(instrument1, 0);
-    this.mixer.tracks[0].setActivated(true);
 
     let instrument4 = new Instrument({
       origin: new THREE.Vector3(0, 0, 0),
@@ -118,7 +117,6 @@ export default class {
       })
     });
     this.mixer.setInstrumentAt(spark1, 11);
-    this.mixer.tracks[11].setActivated(true);
 
     let spark2 = new Spark({
       instrument1: instrument1,
@@ -131,7 +129,6 @@ export default class {
       vfxs: [new VFXLineRaster()]
     });
     this.mixer.setInstrumentAt(spark2, 12);
-    this.mixer.tracks[12].setActivated(true);
 
     let spark3 = new Spark({
       instrument1: instrument2,
@@ -144,7 +141,6 @@ export default class {
       vfxs: [new VFXHitRing()]
     });
     this.mixer.setInstrumentAt(spark3, 13);
-    this.mixer.tracks[13].setActivated(true);
 
     let spark4 = new Spark({
       instrument1: instrument4,
@@ -165,7 +161,6 @@ export default class {
       depth: 0.7,
       phase: -Math.PI * 0.5
     }));
-    this.mixer.tracks[14].setActivated(true);
 
     let spark5 = new Spark({
       instrument1: instrument2,
@@ -186,6 +181,22 @@ export default class {
       depth: 0.7,
       phase: -Math.PI * 0.65
     }));
+
+    const defaultActivatedTracks = [1, 12, 13, 14, 15].map(index => `track${index}`);
+    const isFirstRun = storage.getOrSet('initialized', null) === null;
+
+    if (isFirstRun) {
+      for (const track of this.mixer.tracks) {
+        track.setActivated(defaultActivatedTracks.indexOf(track.trackId) >= 0);
+      }
+
+      storage.set('initialized', Date.now());
+    }
+    else {
+      for (const track of this.mixer.tracks) {
+        track.setActivated(storage.getOrSet(`${track.trackId}/activated`, false));
+      }
+    }
   }
 
   /**

@@ -22,7 +22,6 @@ export default class {
     for (let i = 0; i < numTracks; i++) {
       let track = new Track(`track${i + 1}`);
       track.output.connect(this.master.input);
-      track.setActivated(false);
       this.tracks[i] = track;
     }
 
@@ -70,7 +69,7 @@ export default class {
    */
   setInstrumentAt(instrument, index) {
     this.tracks[index].setInstrument(instrument);
-    this.tracks[index].setActivated(storage.getOrSet(`track${index+1}/activated`, false));
+    // this.tracks[index].setActivated(storage.getOrSet(`track${index+1}/activated`, false));
   }
 
   /**
