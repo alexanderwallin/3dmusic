@@ -18,7 +18,7 @@ gulp.task('clean', function() {
     .pipe(rimraf());
 });
 
-gulp.task('build', ['build:js', 'build:css', 'build:views', 'build:audio']);
+gulp.task('build', ['build:js', 'build:css', 'build:img', 'build:views', 'build:audio']);
 
 gulp.task('build:js', function() {
   return gulp.src('./src/js/app.js')
@@ -39,6 +39,11 @@ gulp.task('build:css', function() {
     .pipe(sourcemaps.write())
     .pipe(gulp.dest('./dist/assets/css'))
     .pipe(livereload());
+});
+
+gulp.task('build:img', function() {
+  return gulp.src('./src/img/*')
+    .pipe(gulp.dest('./dist/img'));
 });
 
 gulp.task('build:views', function() {
