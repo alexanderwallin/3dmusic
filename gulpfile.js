@@ -11,7 +11,7 @@ const sourcemaps = require('gulp-sourcemaps');
 const webserver  = require('gulp-webserver');
 const livereload = require('gulp-livereload');
 
-gulp.task('start', ['build', 'watch', 'serve']);
+gulp.task('start', ['watch', 'serve']);
 
 gulp.task('clean', function() {
   return gulp.src('./dist', { read: false })
